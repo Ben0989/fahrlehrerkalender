@@ -11,6 +11,16 @@
     if(page !== 'calendar') return;
 
     const panelHead = document.querySelector('.panelhead .controls.no-print');
+
+    if(view === 'day' && panelHead){
+      const buttons = [...panelHead.querySelectorAll('button')];
+      const twoDayButton = buttons.find(btn => (btn.textContent || '').includes('2 Tage senden'));
+      if(twoDayButton){
+        twoDayButton.textContent = '📤 Woche senden';
+        twoDayButton.onclick = shareWeek;
+      }
+    }
+
     if(view === 'week' && panelHead && !document.getElementById('shareWeekBtn')){
       const btn = document.createElement('button');
       btn.id = 'shareWeekBtn';
