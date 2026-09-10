@@ -8,6 +8,7 @@
 <link rel="stylesheet" href="styles.css">
 <link rel="stylesheet" href="stage-colors.css">
 <link rel="stylesheet" href="student-management.css">
+<link rel="stylesheet" href="pruefgebiet.css">
 </head>
 <body>
 <header class="top">
@@ -22,6 +23,7 @@
   <aside>
     <button class="nav active" data-page="calendar" onclick="go('calendar')">📅 Kalender</button>
     <button class="nav" data-page="students" onclick="go('students')">👤 Fahrschüler</button>
+    <button class="nav" data-page="practice" onclick="go('practice')">🛣️ Prüfgebiet</button>
     <button class="nav" data-page="vacation" onclick="go('vacation')">🏖️ Urlaub</button>
     <button class="nav" data-page="settings" onclick="go('settings')">⚙️ Einstellungen</button>
   </aside>
@@ -29,9 +31,10 @@
 </div>
 <nav class="mobile">
   <button class="mnav active" data-page="calendar" onclick="go('calendar')">📅<br>Kalender</button>
-  <button class="mnav" data-page="students" onclick="go('students')">👤<br>Fahrschüler</button>
+  <button class="mnav" data-page="students" onclick="go('students')">👤<br>Schüler</button>
+  <button class="mnav" data-page="practice" onclick="go('practice')">🛣️<br>Gebiet</button>
   <button class="mnav" data-page="vacation" onclick="go('vacation')">🏖️<br>Urlaub</button>
-  <button class="mnav" data-page="settings" onclick="go('settings')">⚙️<br>Einstellungen</button>
+  <button class="mnav" data-page="settings" onclick="go('settings')">⚙️<br>Setup</button>
 </nav>
 
 <div class="modalbg" id="appt"><div class="modal">
@@ -90,5 +93,6 @@
 <script src="student-name-enhancements.js"></script>
 <script src="student-management-enhancements.js"></script>
 <script src="duration-interval-enhancements.js"></script>
+<script src="pruefgebiet-integration.js"></script>
 </body>
 </html>
