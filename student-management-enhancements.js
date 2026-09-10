@@ -13,6 +13,12 @@
     }
   }
 
+  function formatDurationLocal(minutes){
+    const m=Number(minutes)||0;
+    if(m>=60){const h=Math.floor(m/60),r=m%60;return r?`${h} Std. ${r} Min.`:`${h} Std.`;}
+    return `${m} Min.`;
+  }
+
   function nextAppointment(studentId){
     const nowDate=today();
     const now=new Date();
@@ -26,8 +32,7 @@
     const a=nextAppointment(studentId);
     if(!a) return 'Kein weiterer Termin geplant';
     const date=fmt(a.date,{weekday:'short',day:'2-digit',month:'2-digit',year:'numeric'});
-    const duration=a.type==='exam'?'60 Min.':`${a.ue} UE`;
-    return `Nächster Termin: ${date}, ${a.time} Uhr · ${TL[a.type]} · ${duration}`;
+    return `Nächster Termin: ${date}, ${a.time} Uhr · ${TL[a.type]} · ${formatDurationLocal(dur(a))}`;
   }
 
   window.filterStudentRows=function(value){
