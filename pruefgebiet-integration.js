@@ -44,9 +44,7 @@
     save();
   }
 
-  function selectedStudent(){
-    return data.students.find(s=>s.id===data.trainingStudentId)||null;
-  }
+  function selectedStudent(){return data.students.find(s=>s.id===data.trainingStudentId)||null}
   function ratings(){
     if(!data.trainingStudentId) return {};
     if(!data.trainingRatings[data.trainingStudentId]) data.trainingRatings[data.trainingStudentId]={};
@@ -85,10 +83,10 @@
     const options=data.students.slice().sort((a,b)=>fullName(a).localeCompare(fullName(b),'de')).map(s=>`<option value="${s.id}" ${s.id===data.trainingStudentId?'selected':''}>${esc(fullName(s))}</option>`).join('');
     const groups=ROUTE_GROUPS.map(g=>`<section class="route-group"><h3>${esc(g.group)}</h3>${g.items.map(item=>{
       const key=routeId(g.group,item),v=r[key]||'';
-      return `<div class="route-row"><div>${esc(item)}</div><select data-state="${state(v)}" onchange="setTrainingRating('${esc(key)}',this.value,this)"><option value="" ${!v?'selected':''}>– nicht bewertet –</option><option ${v==='Sehr gut'?'selected':''}>Sehr gut</option><option ${v==='Solala'?'selected':''}>Solala</option><option ${v==='Nochmal fahren'?'selected':''}>Nochmal fahren</option></select></div>`;
+      return `<div class="route-row"><div>${esc(item)}</div><select data-key="${esc(key)}" data-state="${state(v)}" onchange="setTrainingRating(this.dataset.key,this.value,this)"><option value="" ${!v?'selected':''}>– nicht bewertet –</option><option ${v==='Sehr gut'?'selected':''}>Sehr gut</option><option ${v==='Solala'?'selected':''}>Solala</option><option ${v==='Nochmal fahren'?'selected':''}>Nochmal fahren</option></select></div>`;
     }).join('')}</section>`).join('');
 
-    return `<div class="head"><div><h1>Prüfgebiet</h1><div class="sub">Hattingen / Sprockhövel · fahrerschülerbezogene Streckenbewertung</div></div></div>
+    return `<div class="head"><div><h1>Prüfgebiet</h1><div class="sub">Hattingen / Sprockhövel · fahrschülerbezogene Streckenbewertung</div></div></div>
       <div class="route-toolbar panelbody panel">
         <div class="field"><label>Fahrschüler</label><select onchange="selectTrainingStudent(this.value)"><option value="">– Fahrschüler auswählen –</option>${options}</select></div>
         <button class="btn primary" onclick="openStudent()">+ Fahrschüler</button>
