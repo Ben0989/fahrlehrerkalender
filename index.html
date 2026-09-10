@@ -41,8 +41,8 @@
     <div class="field"><label>Datum</label><input type="date" id="adate"></div>
     <div class="field"><label>Beginn</label><input type="time" id="atime" value="08:00"></div>
     <div class="field"><label>Terminart</label><select id="atype" onchange="preview()"><option value="normal">Normale Fahrstunde</option><option value="overland">Überland</option><option value="autobahn">Autobahn</option><option value="night">Nachtfahrt</option><option value="exam">Prüfung</option></select></div>
-    <div class="field"><label>UE</label><select id="aue" onchange="preview()"><option>1</option><option selected>2</option><option>3</option><option>4</option><option>5</option><option>6</option></select></div>
-    <div class="field full"><label>Dauer</label><div class="dur" id="dur">2 UE = 90 Min.</div></div>
+    <div class="field"><label>Dauer</label><select id="aue" onchange="preview()"><option value="90" selected>1 Std. 30 Min.</option></select></div>
+    <div class="field full"><label>Gesamtdauer</label><div class="dur" id="dur">Dauer: 1 Std. 30 Min.</div></div>
     <div class="field full"><label>Notiz</label><textarea id="anote" rows="3"></textarea></div>
   </div></div>
   <div class="mf"><button class="btn light" onclick="closeM('appt')">Abbrechen</button><button class="btn primary" onclick="saveAppt()">Speichern</button></div>
@@ -89,5 +89,6 @@
 <script src="exam-duration-fix.js"></script>
 <script src="student-name-enhancements.js"></script>
 <script src="student-management-enhancements.js"></script>
+<script src="duration-interval-enhancements.js"></script>
 </body>
 </html>
