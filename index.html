@@ -39,10 +39,10 @@
   <div class="mb"><input type="hidden" id="aid"><div class="form">
     <div class="field full"><label>Fahrschüler</label><select id="astudent"></select></div>
     <div class="field"><label>Datum</label><input type="date" id="adate"></div>
-    <div class="field"><label>Beginn</label><input type="time" id="atime" value="08:00"></div>
+    <div class="field"><label>Beginn</label><input type="time" id="atime" value="08:00" step="900" onchange="preview()"></div>
+    <div class="field"><label>Ende</label><input type="time" id="aend" value="09:30" step="900" onchange="preview()"></div>
     <div class="field"><label>Terminart</label><select id="atype" onchange="preview()"><option value="normal">Normale Fahrstunde</option><option value="overland">Überland</option><option value="autobahn">Autobahn</option><option value="night">Nachtfahrt</option><option value="exam">Prüfung</option></select></div>
-    <div class="field"><label>Dauer</label><select id="aue" onchange="preview()"><option value="90" selected>1 Std. 30 Min.</option></select></div>
-    <div class="field full"><label>Gesamtdauer</label><div class="dur" id="dur">Dauer: 1 Std. 30 Min.</div></div>
+    <div class="field full"><label>Gesamtdauer</label><div class="dur" id="dur">90 Minuten</div></div>
     <div class="field full"><label>Notiz</label><textarea id="anote" rows="3"></textarea></div>
   </div></div>
   <div class="mf"><button class="btn light" onclick="closeM('appt')">Abbrechen</button><button class="btn primary" onclick="saveAppt()">Speichern</button></div>
