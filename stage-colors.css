@@ -1,0 +1,5 @@
+.stage{display:inline-block;padding:5px 9px;border-radius:999px;font-size:12px;font-weight:800;border:1px solid transparent}
+.stage-grundstufe{background:#dbeafe;color:#1d4ed8;border-color:#93c5fd}
+.stage-aufbaustufe{background:#fef3c7;color:#92400e;border-color:#fcd34d}
+.stage-leistungsstufe{background:#dcfce7;color:#166534;border-color:#86efac}
+.stage-reifetest{background:#ede9fe;color:#6d28d9;border-color:#c4b5fd}
