@@ -6,6 +6,7 @@
 <meta name="theme-color" content="#111827">
 <title>FahrlehrerKalender NRW</title>
 <link rel="stylesheet" href="styles.css">
+<link rel="stylesheet" href="stage-colors.css">
 </head>
 <body>
 <header class="top">
@@ -65,7 +66,7 @@
     <div class="field"><label>Nachname</label><input id="sl"></div>
     <div class="field"><label>Telefon</label><input id="sp"></div>
     <div class="field"><label>Führerscheinklasse</label><input id="sc" placeholder="B / BE"></div>
-    <div class="field full"><label>Ausbildungsstufe</label><select id="sstage"><option value="Grundstufe">Grundstufe</option><option value="Aufbaustufe">Aufbaustufe</option><option value="Leistungsstufe">Leistungsstufe</option><option value="Reifestufe">Reifestufe</option><option value="Teststufe">Teststufe</option></select></div>
+    <div class="field full"><label>Ausbildungsstufe</label><select id="sstage"><option value="Grundstufe">Grundstufe</option><option value="Aufbaustufe">Aufbaustufe</option><option value="Leistungsstufe">Leistungsstufe</option><option value="Reife- und Teststufe">Reife- und Teststufe</option></select></div>
     <div class="field full"><label>Notiz</label><textarea id="sn" rows="3"></textarea></div>
   </div></div>
   <div class="mf"><button class="btn light" onclick="closeM('student')">Abbrechen</button><button class="btn primary" onclick="saveStudent()">Speichern</button></div>
@@ -83,5 +84,6 @@
 <div class="toast" id="toast"></div>
 <script src="app.js"></script>
 <script src="enhancements.js"></script>
+<script src="stage-enhancements.js"></script>
 </body>
 </html>
