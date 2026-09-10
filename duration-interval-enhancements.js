@@ -15,6 +15,16 @@
     return 90;
   }
 
+  function calculatedMinutes(start,end){
+    if(!start||!end) return 0;
+    const s=min(start),e=min(end);
+    return e-s;
+  }
+
+  function timeAfter(start,minutes){
+    return tmin(min(start)+Number(minutes||0));
+  }
+
   // Bestehende Termine aus dem alten UE-System verlustfrei auf Minuten migrieren.
   let migrated=false;
   data.appointments.forEach(a=>{
@@ -26,43 +36,30 @@
   });
   if(migrated) save();
 
-  // Zentrale Dauerberechnung: Prüfung immer 60 Min., sonst frei in 15-Minuten-Schritten.
   dur=function(a){return appointmentMinutes(a)};
 
-  function setupDurationSelect(value){
-    const select=document.getElementById('aue');
-    if(!select) return;
-    if(select.dataset.minuteMode!=='1'){
-      select.innerHTML='';
-      for(let m=15;m<=600;m+=15){
-        const opt=document.createElement('option');
-        opt.value=String(m);
-        opt.textContent=formatDuration(m);
-        select.appendChild(opt);
-      }
-      select.dataset.minuteMode='1';
-      const label=select.closest('.field')?.querySelector('label');
-      if(label) label.textContent='Dauer';
-    }
-    let chosen=Number(value)||90;
-    chosen=Math.min(600,Math.max(15,Math.round(chosen/15)*15));
-    select.value=String(chosen);
-  }
-
   preview=function(){
-    const type=document.getElementById('atype'),select=document.getElementById('aue'),box=document.getElementById('dur');
-    if(!type||!select||!box) return;
-    const field=select.closest('.field');
+    const type=document.getElementById('atype'),start=document.getElementById('atime'),finish=document.getElementById('aend'),box=document.getElementById('dur');
+    if(!type||!start||!finish||!box) return;
+
     if(type.value==='exam'){
-      select.disabled=true;
-      if(field) field.style.display='none';
+      finish.value=timeAfter(start.value||'08:00',60);
+      finish.disabled=true;
       box.textContent='Prüfung = 60 Minuten';
-    }else{
-      select.disabled=false;
-      if(field) field.style.display='';
-      setupDurationSelect(select.value||90);
-      box.textContent='Dauer: '+formatDuration(select.value);
+      return;
     }
+
+    finish.disabled=false;
+    const minutes=calculatedMinutes(start.value,finish.value);
+    if(minutes<=0){
+      box.textContent='Ende muss nach dem Beginn liegen.';
+      return;
+    }
+    if(minutes>600){
+      box.textContent='Maximale Dauer: 10 Stunden.';
+      return;
+    }
+    box.textContent=`Dauer: ${formatDuration(minutes)} (${minutes} Min.)`;
   };
 
   openAppt=function(a){
@@ -72,7 +69,8 @@
     adate.value=a?.date||sel;
     atime.value=a?.time||'08:00';
     atype.value=a?.type||'normal';
-    setupDurationSelect(a?appointmentMinutes(a):90);
+    const minutes=a?appointmentMinutes(a):90;
+    aend.value=timeAfter(atime.value,minutes);
     anote.value=a?.note||'';
     preview();
     openM('appt');
@@ -80,7 +78,11 @@
 
   saveAppt=function(){
     if(!astudent.value) return toast('Bitte Fahrschüler auswählen.');
-    const minutes=atype.value==='exam'?60:Number(aue.value||90);
+
+    const minutes=atype.value==='exam'?60:calculatedMinutes(atime.value,aend.value);
+    if(atype.value!=='exam' && minutes<=0) return toast('Das Ende muss nach dem Beginn liegen.');
+    if(minutes>600) return toast('Die maximale Termindauer beträgt 10 Stunden.');
+
     const a={
       id:aid.value||id(),studentId:astudent.value,date:adate.value,time:atime.value,
       type:atype.value,minutes,note:anote.value.trim()
@@ -152,7 +154,6 @@
   render=function(){
     previousRender();
     setTimeout(()=>{
-      // Alte UE-Kennzahl im Dashboard durch echte Fahrzeit ersetzen.
       document.querySelectorAll('.cards .card').forEach(card=>{
         const label=card.querySelector('.label');
         if(label?.textContent==='Fahr-UE'){
@@ -169,7 +170,7 @@
   };
 
   document.addEventListener('change',e=>{
-    if(e.target?.id==='atype'||e.target?.id==='aue') preview();
+    if(e.target?.id==='atype'||e.target?.id==='atime'||e.target?.id==='aend') preview();
   });
 
   render();
