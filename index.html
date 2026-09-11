@@ -9,6 +9,7 @@
 <link rel="stylesheet" href="stage-colors.css">
 <link rel="stylesheet" href="student-management.css">
 <link rel="stylesheet" href="pruefgebiet.css">
+<link rel="stylesheet" href="office-integration.css">
 </head>
 <body>
 <header class="top">
@@ -23,6 +24,7 @@
   <aside>
     <button class="nav active" data-page="calendar" onclick="go('calendar')">📅 Kalender</button>
     <button class="nav" data-page="students" onclick="go('students')">👤 Fahrschüler</button>
+    <button class="nav" data-page="office" onclick="go('office')">📚 Unterricht & Büro</button>
     <button class="nav" data-page="practice" onclick="go('practice')">🛣️ Prüfgebiet</button>
     <button class="nav" data-page="vacation" onclick="go('vacation')">🏖️ Urlaub</button>
     <button class="nav" data-page="settings" onclick="go('settings')">⚙️ Einstellungen</button>
@@ -32,6 +34,7 @@
 <nav class="mobile">
   <button class="mnav active" data-page="calendar" onclick="go('calendar')">📅<br>Kalender</button>
   <button class="mnav" data-page="students" onclick="go('students')">👤<br>Schüler</button>
+  <button class="mnav" data-page="office" onclick="go('office')">📚<br>Büro</button>
   <button class="mnav" data-page="practice" onclick="go('practice')">🛣️<br>Gebiet</button>
   <button class="mnav" data-page="vacation" onclick="go('vacation')">🏖️<br>Urlaub</button>
   <button class="mnav" data-page="settings" onclick="go('settings')">⚙️<br>Setup</button>
@@ -61,6 +64,20 @@
     <div class="field full"><label>Notiz</label><textarea id="pnote" rows="3"></textarea></div>
   </div></div>
   <div class="mf"><button class="btn light" onclick="closeM('private')">Abbrechen</button><button class="btn primary" onclick="savePrivate()">Speichern</button></div>
+</div></div>
+
+<div class="modalbg" id="officeModal"><div class="modal">
+  <div class="mh"><b>Unterricht / Büro</b><button class="icon" onclick="closeM('officeModal')">✕</button></div>
+  <div class="mb"><input type="hidden" id="oid"><div class="form">
+    <div class="field"><label>Art</label><select id="otype"><option value="lesson">Unterricht</option><option value="office">Büro</option></select></div>
+    <div class="field"><label>Bezeichnung</label><input id="otitle" placeholder="z. B. Theorie Klasse B, Bürozeit"></div>
+    <div class="field"><label>Datum</label><input type="date" id="odate"></div>
+    <div class="field"><label>Beginn</label><input type="time" id="otime" value="08:00" step="900" onchange="previewOffice()"></div>
+    <div class="field"><label>Ende</label><input type="time" id="oend" value="09:30" step="900" onchange="previewOffice()"></div>
+    <div class="field full"><label>Gesamtdauer</label><div class="dur" id="odur">Dauer: 1 Std. 30 Min. (90 Min.)</div></div>
+    <div class="field full"><label>Notiz</label><textarea id="onote" rows="3"></textarea></div>
+  </div></div>
+  <div class="mf"><button class="btn light" onclick="closeM('officeModal')">Abbrechen</button><button class="btn primary" onclick="saveOffice()">Speichern</button></div>
 </div></div>
 
 <div class="modalbg" id="student"><div class="modal">
@@ -95,5 +112,6 @@
 <script src="duration-interval-enhancements.js"></script>
 <script src="pruefgebiet-integration.js"></script>
 <script src="date-filter-fix.js"></script>
+<script src="office-integration.js"></script>
 </body>
 </html>
