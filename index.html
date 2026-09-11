@@ -48,6 +48,7 @@
     <div class="field"><label>Beginn</label><input type="time" id="atime" value="08:00" step="900" onchange="preview()"></div>
     <div class="field"><label>Ende</label><input type="time" id="aend" value="09:30" step="900" onchange="preview()"></div>
     <div class="field"><label>Terminart</label><select id="atype" onchange="preview()"><option value="normal">Normale Fahrstunde</option><option value="overland">Überland</option><option value="autobahn">Autobahn</option><option value="night">Nachtfahrt</option><option value="exam">Prüfung</option></select></div>
+    <div class="field"><label>Getriebe</label><select id="atransmission"><option value="automatic">Automatik</option><option value="manual">Schalter</option></select></div>
     <div class="field full"><label>Gesamtdauer</label><div class="dur" id="dur">90 Minuten</div></div>
     <div class="field full"><label>Notiz</label><textarea id="anote" rows="3"></textarea></div>
   </div></div>
@@ -93,6 +94,12 @@
   <div class="mf"><button class="btn light" onclick="closeM('student')">Abbrechen</button><button class="btn primary" onclick="saveStudent()">Speichern</button></div>
 </div></div>
 
+<div class="modalbg" id="studentHistoryModal"><div class="modal">
+  <div class="mh"><b id="historyTitle">Alle Termine</b><button class="icon" onclick="closeM('studentHistoryModal')">✕</button></div>
+  <div class="mb tablewrap"><table><thead><tr><th>Datum / Zeit</th><th>Termin</th><th>Notiz</th></tr></thead><tbody id="historyBody"></tbody></table></div>
+  <div class="mf"><button class="btn light" onclick="closeM('studentHistoryModal')">Schließen</button></div>
+</div></div>
+
 <div class="modalbg" id="vac"><div class="modal">
   <div class="mh"><b>Urlaub</b><button class="icon" onclick="closeM('vac')">✕</button></div>
   <div class="mb"><div class="form">
@@ -113,5 +120,6 @@
 <script src="pruefgebiet-integration.js"></script>
 <script src="date-filter-fix.js"></script>
 <script src="office-integration.js"></script>
+<script src="student-appointment-history.js"></script>
 </body>
 </html>
