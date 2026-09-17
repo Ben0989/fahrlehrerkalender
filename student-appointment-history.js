@@ -3,15 +3,31 @@
   const transmissionLabel=a=>a?.transmission==='manual'?'Schalter':'Automatik';
   const formatDuration=m=>{m=Number(m)||0;const h=Math.floor(m/60),r=m%60;return h?(r?`${h} Std. ${r} Min.`:`${h} Std.`):`${r} Min.`};
 
+  function isCompleted(a){
+    const nowDate=today();
+    if(a.date<nowDate) return true;
+    if(a.date>nowDate) return false;
+    const now=new Date(),nowMinutes=now.getHours()*60+now.getMinutes();
+    return min(a.time)+dur(a)<=nowMinutes;
+  }
+
+  function completedLessons(studentId){
+    return data.appointments
+      .filter(a=>a.studentId===studentId&&a.type!=='exam'&&isCompleted(a))
+      .sort((a,b)=>b.date.localeCompare(a.date)||b.time.localeCompare(a.time));
+  }
+
   window.openStudentAppointments=function(studentId){
     const s=data.students.find(x=>x.id===studentId);
     if(!s) return;
-    const rows=data.appointments
-      .filter(a=>a.studentId===studentId)
-      .sort((a,b)=>b.date.localeCompare(a.date)||b.time.localeCompare(a.time))
-      .map(a=>`<tr><td><b>${fmt(a.date,{weekday:'short',day:'2-digit',month:'2-digit',year:'numeric'})}</b><div class="small">${esc(a.time)}–${esc(end(a))}</div></td><td>${esc(TL[a.type]||a.type)}<div class="small">${formatDuration(dur(a))} · ${transmissionLabel(a)}</div></td><td>${a.note?esc(a.note):'<span class="small">Keine Notiz</span>'}</td></tr>`).join('');
-    document.getElementById('historyTitle').textContent=`Alle Termine – ${s.first} ${s.last}`;
-    document.getElementById('historyBody').innerHTML=rows||'<tr><td colspan="3" class="empty">Keine Termine vorhanden.</td></tr>';
+    const completed=completedLessons(studentId);
+    const totalMinutes=completed.reduce((sum,a)=>sum+dur(a),0);
+    const manual=completed.filter(a=>a.transmission==='manual').length;
+    const automatic=completed.length-manual;
+    const all=data.appointments.filter(a=>a.studentId===studentId).sort((a,b)=>b.date.localeCompare(a.date)||b.time.localeCompare(a.time));
+    const rows=all.map(a=>`<tr><td><b>${fmt(a.date,{weekday:'short',day:'2-digit',month:'2-digit',year:'numeric'})}</b><div class="small">${esc(a.time)}–${esc(end(a))}</div></td><td>${esc(TL[a.type]||a.type)}<div class="small">${formatDuration(dur(a))} · ${transmissionLabel(a)}${isCompleted(a)?' · gefahren':' · geplant'}</div></td><td>${a.note?esc(a.note):'<span class="small">Keine Notiz</span>'}</td></tr>`).join('');
+    document.getElementById('historyTitle').textContent=`Fahrstunden – ${s.first} ${s.last}`;
+    document.getElementById('historyBody').innerHTML=`<tr class="student-history-summary"><td colspan="3"><div class="history-stats"><div><b>${completed.length}</b><span>gefahrene Fahrstunden</span></div><div><b>${formatDuration(totalMinutes)}</b><span>gesamte Fahrzeit</span></div><div><b>${automatic}</b><span>Automatik</span></div><div><b>${manual}</b><span>Schalter</span></div></div></td></tr>${rows||'<tr><td colspan="3" class="empty">Keine Termine vorhanden.</td></tr>'}`;
     openM('studentHistoryModal');
   };
 
@@ -22,14 +38,23 @@
     rows.forEach((row,i)=>{
       const s=data.students[i];
       if(!s) return;
+      const completed=completedLessons(s.id);
+      const totalMinutes=completed.reduce((sum,a)=>sum+dur(a),0);
+      const nameCell=row.querySelector('td');
+      if(nameCell){
+        const info=document.createElement('div');
+        info.className='student-driven-summary';
+        info.textContent=completed.length?`${completed.length} Fahrstunde${completed.length===1?'':'n'} gefahren · ${formatDuration(totalMinutes)}`:'Noch keine Fahrstunde gefahren';
+        nameCell.appendChild(info);
+      }
       const actions=row.querySelector('.student-actions');
       if(actions&&!actions.querySelector('.all-appts')){
         const btn=document.createElement('button');
         btn.className='btn light all-appts';
-        btn.textContent='Alle Termine';
+        btn.textContent='Fahrstunden';
         btn.onclick=()=>openStudentAppointments(s.id);
         actions.insertBefore(btn,actions.firstChild);
-      }
+      } else if(actions?.querySelector('.all-appts')) actions.querySelector('.all-appts').textContent='Fahrstunden';
     });
     return wrap.innerHTML;
   };
