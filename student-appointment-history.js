@@ -26,8 +26,10 @@
     const automatic=completed.length-manual;
     const all=data.appointments.filter(a=>a.studentId===studentId).sort((a,b)=>b.date.localeCompare(a.date)||b.time.localeCompare(a.time));
     const rows=all.map(a=>`<tr><td><b>${fmt(a.date,{weekday:'short',day:'2-digit',month:'2-digit',year:'numeric'})}</b><div class="small">${esc(a.time)}–${esc(end(a))}</div></td><td>${esc(TL[a.type]||a.type)}<div class="small">${formatDuration(dur(a))} · ${transmissionLabel(a)}${isCompleted(a)?' · gefahren':' · geplant'}</div></td><td>${a.note?esc(a.note):'<span class="small">Keine Notiz</span>'}</td></tr>`).join('');
-    document.getElementById('historyTitle').textContent=`Fahrstunden – ${s.first} ${s.last}`;
-    document.getElementById('historyBody').innerHTML=`<tr class="student-history-summary"><td colspan="3"><div class="history-stats"><div><b>${completed.length}</b><span>gefahrene Fahrstunden</span></div><div><b>${formatDuration(totalMinutes)}</b><span>gesamte Fahrzeit</span></div><div><b>${automatic}</b><span>Automatik</span></div><div><b>${manual}</b><span>Schalter</span></div></div></td></tr>${rows||'<tr><td colspan="3" class="empty">Keine Termine vorhanden.</td></tr>'}`;
+    const title=document.getElementById('historyTitle'),body=document.getElementById('historyBody');
+    if(!title||!body){toast('Terminübersicht konnte nicht geöffnet werden.');return;}
+    title.textContent=`Fahrstunden – ${s.first} ${s.last}`;
+    body.innerHTML=`<tr class="student-history-summary"><td colspan="3"><div class="history-stats"><div><b>${completed.length}</b><span>gefahrene Fahrstunden</span></div><div><b>${formatDuration(totalMinutes)}</b><span>gesamte Fahrzeit</span></div><div><b>${automatic}</b><span>Automatik</span></div><div><b>${manual}</b><span>Schalter</span></div></div></td></tr>${rows||'<tr><td colspan="3" class="empty">Keine Termine vorhanden.</td></tr>'}`;
     openM('studentHistoryModal');
   };
 
@@ -51,15 +53,19 @@
       if(actions&&!actions.querySelector('.all-appts')){
         const btn=document.createElement('button');
         btn.className='btn light all-appts';
+        btn.type='button';
         btn.textContent='Fahrstunden';
-        btn.onclick=()=>openStudentAppointments(s.id);
+        btn.setAttribute('onclick',`openStudentAppointments('${s.id}')`);
         actions.insertBefore(btn,actions.firstChild);
-      } else if(actions?.querySelector('.all-appts')) actions.querySelector('.all-appts').textContent='Fahrstunden';
+      } else if(actions?.querySelector('.all-appts')){
+        const btn=actions.querySelector('.all-appts');
+        btn.textContent='Fahrstunden';
+        btn.setAttribute('onclick',`openStudentAppointments('${s.id}')`);
+      }
     });
     return wrap.innerHTML;
   };
 
-  const oldShareText=window.shareText;
   window.shareText=function(days){
     const lines=['Fahrplan ab '+fmt(sel)];
     for(let i=0;i<days;i++){
