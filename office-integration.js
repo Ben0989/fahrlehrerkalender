@@ -84,7 +84,7 @@
         const body=col.querySelector('.weekbody');if(!body) return;
         entries(iso(add(start,i))).forEach(e=>{
           const el=document.createElement('div');el.className='weekevent office-calendar-event';el.style.setProperty('--c',COLORS[e.type]);
-          el.innerHTML=`<b>${esc(e.time)}–${esc(officeEnd(e))}</b><br>${e.type==='lesson'?'📚':'🗂️'} ${esc(e.title)}<br><span class="small">${LABELS[e.type]}</span>`;body.appendChild(el);
+          el.innerHTML=`<b>${esc(e.time)}–${esc(officeEnd(e))}</b><br>${e.type==='lesson'?'📚':'🗂️'} ${esc(e.title)}<br><span class="small">${LABELS[e.type]}</span><div class="week-actions no-print"><button class="icon" type="button" onclick="editOffice('${e.id}')">✎</button><button class="icon" type="button" onclick="deleteOffice('${e.id}')">🗑</button></div>`;body.appendChild(el);
         });
       });
     }
