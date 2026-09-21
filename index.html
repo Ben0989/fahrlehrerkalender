@@ -109,6 +109,7 @@
   </div></div>
   <div class="mf"><button class="btn light" onclick="closeM('vac')">Abbrechen</button><button class="btn primary" onclick="saveVac()">Speichern</button></div>
 </div></div>
+<input type="file" id="backupImportFile" accept=".json,application/json" hidden onchange="importDataFile(this.files[0]);this.value=''">
 <div class="toast" id="toast"></div>
 <script src="app.js"></script>
 <script src="enhancements.js"></script>
@@ -121,5 +122,6 @@
 <script src="date-filter-fix.js"></script>
 <script src="office-integration.js"></script>
 <script src="student-appointment-history.js"></script>
+<script src="backup-import-export.js"></script>
 </body>
 </html>
