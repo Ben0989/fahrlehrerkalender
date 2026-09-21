@@ -45,6 +45,23 @@
     save();
   }
 
+  // Einmalige Migration der Bewertungen für die aus Südstadt nach Sonstiges verschobenen Strecken.
+  if(!data.trainingRoutesMigratedV2){
+    const moved=['Oberwinzerfeld','Bahnhofstraße',"Gegenüber McDonald's links",'Salzweg','Beschleunigungsstreifen Richtung Blankenstein','Beschleunigungsstreifen Richtung Hattingen','Polizei links','Avantgarde Hotel / Cappadocia – Richtung Kreis','Avantgarde Hotel / Cappadocia – andersrum','Rechts vor links','Rechts vor links Netto','Avantgarde Sackgasse umkehren','Avantgarde Ampel vor Netto'];
+    Object.values(data.trainingRatings).forEach(r=>{
+      if(!r||typeof r!=='object') return;
+      moved.forEach(item=>{
+        const oldKey=routeId('Südstadt',item),newKey=routeId('Sonstiges',item);
+        if(Object.prototype.hasOwnProperty.call(r,oldKey)){
+          if(!Object.prototype.hasOwnProperty.call(r,newKey)) r[newKey]=r[oldKey];
+          delete r[oldKey];
+        }
+      });
+    });
+    data.trainingRoutesMigratedV2=true;
+    save();
+  }
+
   function selectedStudent(){return data.students.find(s=>s.id===data.trainingStudentId)||null}
   function ratings(){
     if(!data.trainingStudentId) return {};
