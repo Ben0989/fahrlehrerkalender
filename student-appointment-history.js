@@ -24,7 +24,7 @@
     if(modal) return modal;
     modal=document.createElement('div');
     modal.className='modalbg';modal.id='studentHistoryModal';
-    modal.innerHTML=`<div class="modal"><div class="mh"><b id="historyTitle">Fahrstunden</b><button class="icon" type="button" onclick="document.getElementById('studentHistoryModal').classList.remove('open')">✕</button></div><div class="mb tablewrap"><table><thead><tr><th>Datum / Zeit</th><th>Termin</th><th>Notiz</th></tr></thead><tbody id="historyBody"></tbody></table></div><div class="mf"><button class="btn light" type="button" onclick="document.getElementById('studentHistoryModal').classList.remove('open')">Schließen</button></div></div>`;
+    modal.innerHTML=`<div class="modal"><div class="mh"><b id="historyTitle">Fahrstunden</b><button class="icon" type="button" onclick="document.getElementById('studentHistoryModal').classList.remove('open')">✕</button></div><div class="mb tablewrap"><table><thead><tr><th>Datum / Zeit</th><th>Termin</th><th>Notiz</th></tr></thead><tbody id="historyBody"></tbody></table></div><div class="mf"><button class="btn light history-print-btn" type="button" onclick="window.printStudentHistory()">🖨️ Drucken / PDF</button><button class="btn light" type="button" onclick="document.getElementById('studentHistoryModal').classList.remove('open')">Schließen</button></div></div>`;
     document.body.appendChild(modal);return modal;
   }
 
@@ -39,8 +39,19 @@
     const rows=all.map(a=>`<tr><td><b>${fmt(a.date,{weekday:'short',day:'2-digit',month:'2-digit',year:'numeric'})}</b><div class="small">${esc(a.time)}–${esc(end(a))}</div></td><td>${esc(TL[a.type]||a.type)}<div class="small">${a.type==='exam'?'60 Min. Prüfung':formatUE(dur(a))} · ${transmissionLabel(a)} · ${isCompleted(a)?'gefahren':'geplant'}</div></td><td>${a.note?esc(a.note):'<span class="small">Keine Notiz</span>'}</td></tr>`).join('');
     const modal=ensureHistoryModal();
     modal.querySelector('#historyTitle').textContent=`Fahrstunden – ${s.first} ${s.last}`;
+    modal.dataset.studentName=`${s.first} ${s.last}`;
     modal.querySelector('#historyBody').innerHTML=`<tr class="student-history-summary"><td colspan="3"><div class="history-stats"><div><b>${formatUE(totalMinutes)}</b><span>gefahren gesamt</span></div><div><b>${completed.length}</b><span>Fahrtermine</span></div><div><b>${formatUE(automaticMinutes)}</b><span>Automatik</span></div><div><b>${formatUE(manualMinutes)}</b><span>Schalter</span></div></div></td></tr>${rows||'<tr><td colspan="3" class="empty">Keine Termine vorhanden.</td></tr>'}`;
     modal.classList.add('open');
+  };
+
+  window.printStudentHistory=function(){
+    const modal=document.getElementById('studentHistoryModal');
+    if(!modal||!modal.classList.contains('open')) return toast('Bitte zuerst einen Fahrschüler öffnen.');
+    document.body.classList.add('printing-student-history');
+    const cleanup=()=>document.body.classList.remove('printing-student-history');
+    window.addEventListener('afterprint',cleanup,{once:true});
+    window.print();
+    setTimeout(cleanup,1500);
   };
 
   students=function(){
