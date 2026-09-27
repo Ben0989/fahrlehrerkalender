@@ -77,6 +77,14 @@
         el.innerHTML=`<b>${esc(e.time)}–${esc(officeEnd(e))}</b><div><strong>${e.type==='lesson'?'📚':'🗂️'} ${esc(e.title)}</strong><span class="small">${LABELS[e.type]} · ${formatDuration(e.minutes)}</span></div><div class="ea"><button class="icon" onclick="editOffice('${e.id}')">✎</button> <button class="icon" onclick="deleteOffice('${e.id}')">🗑</button></div>`;
         body.appendChild(el);
       });
+      // Fahrstunden, Privat-, Unterrichts- und Bürotermine gemeinsam nach Beginn sortieren.
+      const timed=[...body.children].filter(el=>el.matches('.event'));
+      timed.sort((a,b)=>{
+        const ta=(a.querySelector('b')?.textContent||'99:99').slice(0,5);
+        const tb=(b.querySelector('b')?.textContent||'99:99').slice(0,5);
+        return ta.localeCompare(tb);
+      }).forEach(el=>body.appendChild(el));
+      if(timed.length) body.querySelectorAll('.empty').forEach(el=>el.remove());
     }
     if(view==='week'){
       const start=monday(pdate(sel));
@@ -86,6 +94,13 @@
           const el=document.createElement('div');el.className='weekevent office-calendar-event';el.style.setProperty('--c',COLORS[e.type]);
           el.innerHTML=`<b>${esc(e.time)}–${esc(officeEnd(e))}</b><br>${e.type==='lesson'?'📚':'🗂️'} ${esc(e.title)}<br><span class="small">${LABELS[e.type]}</span><div class="week-actions no-print"><button class="icon" type="button" onclick="editOffice('${e.id}')">✎</button><button class="icon" type="button" onclick="deleteOffice('${e.id}')">🗑</button></div>`;body.appendChild(el);
         });
+        const timed=[...body.children].filter(el=>el.matches('.weekevent'));
+        timed.sort((a,b)=>{
+          const ta=(a.querySelector('b')?.textContent||'99:99').slice(0,5);
+          const tb=(b.querySelector('b')?.textContent||'99:99').slice(0,5);
+          return ta.localeCompare(tb);
+        }).forEach(el=>body.appendChild(el));
+        if(timed.length) [...body.children].filter(el=>el.matches('span.small')&&el.textContent.includes('Keine Termine')).forEach(el=>el.remove());
       });
     }
   }
