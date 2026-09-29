@@ -14,3 +14,5 @@
  body.printing-student-history #studentHistoryModal .small{font-size:9px!important}
  body.printing-student-history #studentHistoryModal .history-stats{display:grid!important;grid-template-columns:repeat(4,1fr)!important;gap:8px!important}
 }
+
+.calendar-student-link{cursor:pointer;text-decoration:underline;text-decoration-style:dotted;text-underline-offset:3px;font-weight:700}.calendar-student-link:hover{opacity:.72}.calendar-ue-cards{margin-bottom:14px}@media print{.calendar-student-link{text-decoration:none}}
