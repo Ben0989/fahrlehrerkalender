@@ -6,7 +6,8 @@
     {group:'Sprockhövel',items:['Querspange Richtung Haßlinghausen','Osterhöfgen','Glückaufhalle','Sportplatz']},
     {group:'Südstadt',items:['Alte Feuerwehr links','Öko','Busbahnhof VB','Neue Feuerwehr','Grünstraße','Nordstraße – KH Richtung Harzer','Nordstraße – andersrum','Harzer – Richtung Avantgarde','Harzer – andersrum','Talstraße – von oben','Talstraße – von unten','Waldstraße – von oben','Waldstraße – von unten']},
     {group:'Sonstiges',items:['Oberwinzerfeld','Bahnhofstraße',"Gegenüber McDonald's links",'Salzweg','Beschleunigungsstreifen Richtung Blankenstein','Beschleunigungsstreifen Richtung Hattingen','Polizei links','Avantgarde Hotel / Cappadocia – Richtung Kreis','Avantgarde Hotel / Cappadocia – andersrum','Rechts vor links','Rechts vor links Netto','Avantgarde Sackgasse umkehren','Avantgarde Ampel vor Netto']},
-    {group:'Umkehren',items:['Blankenstein KH','Am Altland','Holthausen Kita','Wasserwerk','Industriegebiet','TÜV / Fitnessstudio','Witten-Herbede Kogelheide']},\n    {group:'Stopschilder',items:['Oberwinzerfeld','TÜV','Diergardt','Stolle Stop','Osterhöfgen','Avantgarde','Hellweg','Talstraße','Abknickende Vorfahrtstraße']},
+    {group:'Umkehren',items:['Blankenstein KH','Am Altland','Holthausen Kita','Wasserwerk','Industriegebiet','TÜV / Fitnessstudio','Witten-Herbede Kogelheide']},
+    {group:'Stopschilder',items:['Oberwinzerfeld','TÜV','Diergardt','Stolle Stop','Osterhöfgen','Avantgarde','Hellweg','Talstraße','Abknickende Vorfahrtstraße']},
     {group:'Grundfahraufgaben',items:['Parklücke','Parkbox (vorwärts)','Parkbox (rückwärts)','Umkehren','Gefahrbremsung']},
     {group:'Einbahnstraßen',items:['Aldi','Marktplatz – kleine Runde','Marktplatz – große Runde','Tanzschule','Hirschberger','Oberwinzerfeld','Avantgarde Hotel','Blankenstein']}
   ];
@@ -16,6 +17,8 @@
   const fullName=s=>`${s.first||''} ${s.last||''}`.trim();
 
   if(!data.trainingRatings||typeof data.trainingRatings!=='object') data.trainingRatings={};
+  if(!data.trainingComments||typeof data.trainingComments!=='object') data.trainingComments={};
+  if(!data.trainingNotes||typeof data.trainingNotes!=='object') data.trainingNotes={};
   if(!('trainingStudentId' in data)) data.trainingStudentId=null;
 
   // Einmalige Übernahme aus der bisherigen eigenständigen Prüfgebiet-App.
@@ -68,6 +71,11 @@
     if(!data.trainingRatings[data.trainingStudentId]) data.trainingRatings[data.trainingStudentId]={};
     return data.trainingRatings[data.trainingStudentId];
   }
+  function comments(){
+    if(!data.trainingStudentId) return {};
+    if(!data.trainingComments[data.trainingStudentId]) data.trainingComments[data.trainingStudentId]={};
+    return data.trainingComments[data.trainingStudentId];
+  }
   function state(v){return v==='Sehr gut'?'good':v==='Solala'?'mid':v==='Nochmal fahren'?'bad':'none'}
   function counts(){
     const vals=Object.values(ratings());
@@ -83,6 +91,11 @@
     if(el) el.dataset.state=state(value);
     updateTrainingCounts();
   };
+  window.setTrainingComment=function(key,value){
+    if(!data.trainingStudentId) return;
+    const cm=comments(); if(value.trim()) cm[key]=value; else delete cm[key]; save();
+  };
+  window.setTrainingNotes=function(value){if(!data.trainingStudentId)return;data.trainingNotes[data.trainingStudentId]=value;save();};
   window.updateTrainingCounts=function(){
     const c=counts();
     const g=document.getElementById('trainingGood'),m=document.getElementById('trainingMid'),b=document.getElementById('trainingBad');
@@ -97,11 +110,11 @@
 
   function practicePage(){
     const student=selectedStudent();
-    const r=ratings(),c=counts();
+    const r=ratings(),cm=comments(),c=counts();
     const options=data.students.slice().sort((a,b)=>fullName(a).localeCompare(fullName(b),'de')).map(s=>`<option value="${s.id}" ${s.id===data.trainingStudentId?'selected':''}>${esc(fullName(s))}</option>`).join('');
     const groups=ROUTE_GROUPS.map(g=>`<section class="route-group"><h3>${esc(g.group)}</h3>${g.items.map(item=>{
       const key=routeId(g.group,item),v=r[key]||'';
-      return `<div class="route-row"><div>${esc(item)}</div><select data-key="${esc(key)}" data-state="${state(v)}" onchange="setTrainingRating(this.dataset.key,this.value,this)"><option value="" ${!v?'selected':''}>– nicht bewertet –</option><option ${v==='Sehr gut'?'selected':''}>Sehr gut</option><option ${v==='Solala'?'selected':''}>Solala</option><option ${v==='Nochmal fahren'?'selected':''}>Nochmal fahren</option></select></div>`;
+      return `<div class="route-row"><div class="route-main"><div>${esc(item)}</div><select data-key="${esc(key)}" data-state="${state(v)}" onchange="setTrainingRating(this.dataset.key,this.value,this)"><option value="" ${!v?'selected':''}>– nicht bewertet –</option><option ${v==='Sehr gut'?'selected':''}>Sehr gut</option><option ${v==='Solala'?'selected':''}>Solala</option><option ${v==='Nochmal fahren'?'selected':''}>Nochmal fahren</option></select></div><textarea class="route-comment" placeholder="Kommentar / Auffälligkeiten" data-key="${esc(key)}" oninput="setTrainingComment(this.dataset.key,this.value)">${esc(cm[key]||'')}</textarea></div>`;
     }).join('')}</section>`).join('');
 
     return `<div class="head"><div><h1>Prüfgebiet</h1><div class="sub">Hattingen / Sprockhövel · fahrschülerbezogene Streckenbewertung</div></div></div>
@@ -111,7 +124,7 @@
       </div>
       ${!data.students.length?'<div class="panel route-empty">Lege zuerst einen Fahrschüler an.</div>':`<div class="route-summary"><div class="route-stat good"><strong id="trainingGood">${c.good}</strong><small>Sehr gut</small></div><div class="route-stat mid"><strong id="trainingMid">${c.mid}</strong><small>Solala</small></div><div class="route-stat bad"><strong id="trainingBad">${c.bad}</strong><small>Nochmal fahren</small></div></div>
       <div class="route-actions no-print"><button class="btn light" onclick="window.print()">🖨️ Drucken / PDF</button><button class="btn light" onclick="resetTrainingRatings()">Bewertungen zurücksetzen</button></div>
-      ${student?`<div class="route-note">Bewertungen für <b>${esc(fullName(student))}</b> werden automatisch zusammen mit den übrigen App-Daten gespeichert.</div>${groups}`:'<div class="panel route-empty">Wähle einen Fahrschüler aus, um das Prüfgebiet zu bewerten.</div>'}`}`;
+      ${student?`<div class="route-note">Bewertungen und Notizen für <b>${esc(fullName(student))}</b> werden automatisch zusammen mit den übrigen App-Daten gespeichert.</div>${groups}<section class="route-general-notes"><h3>Allgemeine Notizen zum Fahrschüler</h3><textarea placeholder="Allgemeine Auffälligkeiten, Hinweise oder Beobachtungen …" oninput="setTrainingNotes(this.value)">${esc(data.trainingNotes[student.id]||'')}</textarea></section>`:'<div class="panel route-empty">Wähle einen Fahrschüler aus, um das Prüfgebiet zu bewerten.</div>'}`}`;
   }
 
   const previousRender=render;
@@ -130,6 +143,8 @@
       previousDelete(studentId);
       if(!data.students.some(s=>s.id===studentId)&&data.trainingRatings[studentId]){
         delete data.trainingRatings[studentId];
+        delete data.trainingComments[studentId];
+        delete data.trainingNotes[studentId];
         if(data.trainingStudentId===studentId) data.trainingStudentId=null;
         save();
       }
