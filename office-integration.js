@@ -86,6 +86,34 @@
       }).forEach(el=>body.appendChild(el));
       if(timed.length) body.querySelectorAll('.empty').forEach(el=>el.remove());
     }
+    if(view==='month'){
+      const start=monday(new Date(pdate(sel).getFullYear(),pdate(sel).getMonth(),1));
+      document.querySelectorAll('.month .day').forEach((cell,i)=>{
+        const ds=iso(add(start,i));
+        entries(ds).forEach(e=>{
+          const badge=document.createElement('div');
+          badge.className='badge office-calendar-event';
+          badge.style.background=COLORS[e.type]+'44';
+          badge.textContent=(e.type==='lesson'?'📚 ':'🗂️ ')+e.time+' '+e.title;
+          badge.title=LABELS[e.type]+' · '+e.time+'–'+officeEnd(e);
+          cell.appendChild(badge);
+        });
+      });
+    }
+    if(view==='year'){
+      document.querySelectorAll('.minimonth').forEach((monthEl,mo)=>{
+        const start=monday(new Date(pdate(sel).getFullYear(),mo,1));
+        const days=monthEl.querySelectorAll('.minigrid > span');
+        for(let i=0;i<42;i++){
+          const el=days[i+7];if(!el) continue;
+          const matches=entries(iso(add(start,i)));
+          if(!matches.length) continue;
+          el.style.outline='2px solid '+COLORS.office;
+          el.style.outlineOffset='-2px';
+          el.title=matches.map(e=>LABELS[e.type]+': '+e.time+' '+e.title).join(' | ');
+        }
+      });
+    }
     if(view==='week'){
       const start=monday(pdate(sel));
       document.querySelectorAll('.weekcol').forEach((col,i)=>{
