@@ -45,7 +45,7 @@
   <div class="mb"><input type="hidden" id="aid"><div class="form">
     <div class="field full"><label>Fahrschüler</label><select id="astudent"></select></div>
     <div class="field"><label>Datum</label><input type="date" id="adate"></div>
-    <div class="field"><label>Beginn</label><input type="time" id="atime" value="08:00" step="900" onchange="preview()"></div>
+    <div class="field"><label>Beginn</label><input type="time" id="atime" value="08:00" step="900" onchange="syncAppointmentEnd();preview()"></div>
     <div class="field"><label>Ende</label><input type="time" id="aend" value="09:30" step="900" onchange="preview()"><div class="controls"><button class="btn light" type="button" onclick="adjustEnd(-15)">− 15 Min.</button><button class="btn light" type="button" onclick="adjustEnd(15)">+ 15 Min.</button></div></div>
     <div class="field"><label>Terminart</label><select id="atype" onchange="preview()"><option value="normal">Normale Fahrstunde</option><option value="overland">Überland</option><option value="autobahn">Autobahn</option><option value="night">Nachtfahrt</option><option value="exam">Prüfung</option></select></div>
     <div class="field"><label>Getriebe</label><select id="atransmission"><option value="automatic">Automatik</option><option value="manual">Schalter</option></select></div>
@@ -73,7 +73,7 @@
     <div class="field"><label>Art</label><select id="otype"><option value="lesson">Unterricht</option><option value="office">Büro</option></select></div>
     <div class="field"><label>Bezeichnung</label><input id="otitle" placeholder="z. B. Theorie Klasse B, Bürozeit"></div>
     <div class="field"><label>Datum</label><input type="date" id="odate"></div>
-    <div class="field"><label>Beginn</label><input type="time" id="otime" value="08:00" step="900" onchange="previewOffice()"></div>
+    <div class="field"><label>Beginn</label><input type="time" id="otime" value="08:00" step="900" onchange="syncOfficeEnd();previewOffice()"></div>
     <div class="field"><label>Ende</label><input type="time" id="oend" value="09:30" step="900" onchange="previewOffice()"><div class="controls"><button type="button" class="btn light" onclick="adjustOfficeEnd(-15)">− 15 Min.</button><button type="button" class="btn light" onclick="adjustOfficeEnd(15)">+ 15 Min.</button></div></div>
     <div class="field full"><label>Gesamtdauer</label><div class="dur" id="odur">Dauer: 1 Std. 30 Min. (90 Min.)</div></div>
     <div class="field"><label>Wiederholen</label><select id="orepeat"><option value="none">Einmalig</option><option value="daily">Täglich</option><option value="weekly">Wöchentlich</option><option value="biweekly">Alle 2 Wochen</option><option value="monthly">Monatlich</option></select></div><div class="field"><label>Wiederholen bis</label><input type="date" id="orepeatuntil"></div><div class="field full"><label>Notiz</label><textarea id="onote" rows="3"></textarea></div>
@@ -126,5 +126,6 @@
 <script src="calendar-student-overview.js"></script>
 <script src="recurring-appointments.js"></script>
 <script src="recurring-office.js"></script>
+<script src="auto-end-time.js"></script>
 </body>
 </html>
