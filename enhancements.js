@@ -32,7 +32,7 @@
   function nightPlanningText(ds){
     const s=sunset(ds);
     if(!s) return 'Sonnenuntergang nicht verfügbar';
-    return `Sonnenuntergang ${s} Uhr · Nachtfahrt sinnvoll ab Sonnenuntergang; Dämmerung/Dunkelheit und örtliche Lichtverhältnisse beachten.`;
+    return `Nachtfahrt: vor Sonnenaufgang (${sunrise(ds)||'–'} Uhr) oder nach Sonnenuntergang (${s} Uhr). Dämmerung/Dunkelheit und örtliche Lichtverhältnisse beachten.`;
   }
 
   window.shareWeek=async function(){
@@ -98,7 +98,7 @@
         c.className='card';
         c.id='nightHintCard';
         const s=sunset(sel);
-        c.innerHTML=`<div class="label">Nachtfahrt-Planung</div><div class="metric">${s?'ab '+s:'–'}</div><div class="small">Dämmerung/Dunkelheit und örtliche Lichtverhältnisse beachten.</div>`;
+        c.innerHTML=`<div class="label">Nachtfahrt-Planung</div><div class="metric">${sunrise(sel)?'vor '+sunrise(sel):'–'} / ${s?'ab '+s:'–'}</div><div class="small">Dämmerung/Dunkelheit und örtliche Lichtverhältnisse beachten.</div>`;
         cards.appendChild(c);
       }
 
@@ -107,7 +107,8 @@
         if(txt.includes('Nachtfahrt')&&!ev.querySelector('.night-warning')){
           const timeText=ev.querySelector('b')?.textContent||'';
           const start=timeText.split('–')[0]?.trim(),s=sunset(sel);
-          if(start&&s&&min(start)<min(s)){
+          const rise=sunrise(sel);
+          if(start&&s&&rise&&min(start)>=min(rise)&&min(start)<min(s)){
             const target=ev.querySelector('div:nth-child(2)');
             if(target){
               const w=document.createElement('span');
