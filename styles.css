@@ -103,3 +103,21 @@
  body.printing-week .compact-print-day{break-inside:avoid!important;page-break-inside:avoid!important}
  body.printing-week .compact-print-entry{padding:3px 3px!important}
 }
+
+/* Kompakte Wochenansicht mit Uhrzeit direkt links neben jedem Termin */
+@media screen{
+ .timeline-week{grid-template-columns:40px repeat(7,minmax(112px,1fr))!important;grid-template-rows:40px 864px!important;min-width:824px!important}
+ .timeline-week>.timeline-axis{height:864px!important}
+ .timeline-week>.weekcol>.weekhead{height:40px!important;min-height:40px!important;overflow:hidden!important;padding:4px 2px!important;line-height:1.2!important}
+ .timeline-week>.weekcol>.weekhead .small{display:none!important}
+ .timeline-week>.weekcol>.timeline-day{height:864px!important}
+ .timeline-week .timeline-day{background:repeating-linear-gradient(to bottom,#fff 0,#fff 35px,#e2e8f0 35px,#e2e8f0 36px)!important}
+ .timeline-axis span{font-size:10px!important;font-weight:600!important}
+ .timeline-week .timeline-entry{left:38px!important;right:1px!important;padding:2px 3px!important;font-size:10px!important;line-height:1.1!important;overflow:hidden!important}
+ .timeline-event-time{position:absolute;left:1px;width:35px;box-sizing:border-box;text-align:right;padding:2px 2px 0 0;font-size:10px;font-weight:700;color:#334155;z-index:4;pointer-events:none}
+ .timeline-week .timeline-actions{margin-top:2px!important}
+ .timeline-week .timeline-actions button{min-height:18px!important;padding:0 3px!important}
+ .timeline-now-line{position:absolute;left:0;right:0;height:0;border-top:2px solid #dc2626;z-index:8;pointer-events:none}
+ .timeline-now-line:before{content:'';position:absolute;left:-4px;top:-4px;width:7px;height:7px;border-radius:50%;background:#dc2626}
+ .timeline-now-line span{position:absolute;right:0;top:-14px;color:#dc2626;background:#fff;font-size:10px;font-weight:800;padding:0 2px}
+}
