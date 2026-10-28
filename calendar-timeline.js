@@ -23,6 +23,9 @@
  window.shiftCalendarEntry=move;
  const oldOpenPrivate=openPrivate;
  openPrivate=function(p){oldOpenPrivate(p);const b=document.querySelector('#private .mf .primary');if(b){b.type='button';b.style.pointerEvents='auto';b.style.position='relative';b.style.zIndex='2';b.onclick=function(e){e.preventDefault();e.stopPropagation();savePrivate();};}};
+ const startKey='fahrlehrerkalender_week_start_hour';
+ const getStartHour=()=>Math.max(0,Math.min(23,parseInt(localStorage.getItem(startKey)||'0',10)||0));
+ window.setWeekStartHour=function(hour){localStorage.setItem(startKey,String(Math.max(0,Math.min(23,Number(hour)||0))));const wrap=document.querySelector('.weekwrap');if(wrap)wrap.scrollTop=getStartHour()*36;};
  const oldRender=render;
  function drawTimeline(){
   if(page!=='calendar'||view!=='week')return;
@@ -31,6 +34,14 @@
   const days=[...week.querySelectorAll('.weekcol')];if(days.length!==7)return;
   const start=monday(pdate(sel)),px=0.6,top=0;
   week.classList.add('timeline-week');
+  let control=wrap.parentElement.querySelector('.week-start-control');
+  if(!control){
+   control=document.createElement('label');control.className='week-start-control no-print';
+   control.innerHTML='<span>Wochenansicht ab</span><select aria-label="Startzeit der Wochenansicht">'+Array.from({length:24},(_,h)=>'<option value="'+h+'">'+String(h).padStart(2,'0')+':00 Uhr</option>').join('')+'</select>';
+   wrap.parentElement.insertBefore(control,wrap);
+   control.querySelector('select').addEventListener('change',e=>window.setWeekStartHour(e.target.value));
+  }
+  control.querySelector('select').value=String(getStartHour());
   let axis=document.createElement('div');axis.className='timeline-axis';
   for(let h=0;h<=24;h++)axis.insertAdjacentHTML('beforeend','<span style="top:'+(h*60*px)+'px">'+String(h).padStart(2,'0')+':00</span>');
   week.prepend(axis);
@@ -65,6 +76,7 @@
    });
   });
   updateNowLine();
+  wrap.scrollTop=getStartHour()*36;
  }
  function updateNowLine(){
   document.querySelectorAll('.timeline-now-line').forEach(el=>el.remove());
