@@ -91,3 +91,15 @@
  .compact-print-entry small{font-size:8px;color:#475569}
  .compact-print-day .print-empty{font-size:9px;color:#64748b;padding:5px 3px}
 }
+
+/* Druckbogen isolieren: exakt eine kompakte Wochenliste ohne leere Kalenderseiten */
+@media print{
+ @page{size:A4 landscape;margin:8mm}
+ html,body{height:auto!important;min-height:0!important;overflow:visible!important}
+ body.printing-week>.top,body.printing-week>.layout,body.printing-week>.mobile,body.printing-week>.modalbg,body.printing-week>.toast,body.printing-week>#backupImportFile{display:none!important}
+ body.printing-week{display:block!important;margin:0!important;padding:0!important;background:#fff!important}
+ body.printing-week>#week-print-sheet{display:block!important;position:static!important;width:100%!important;max-width:none!important;min-height:0!important;height:auto!important;overflow:visible!important;margin:0!important;padding:0!important;break-after:avoid!important;page-break-after:avoid!important}
+ body.printing-week .compact-print-days{display:grid!important;grid-template-columns:repeat(7,minmax(0,1fr))!important;gap:4px!important;align-items:start!important}
+ body.printing-week .compact-print-day{break-inside:avoid!important;page-break-inside:avoid!important}
+ body.printing-week .compact-print-entry{padding:3px 3px!important}
+}
