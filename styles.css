@@ -121,3 +121,11 @@
  .timeline-now-line:before{content:'';position:absolute;left:-4px;top:-4px;width:7px;height:7px;border-radius:50%;background:#dc2626}
  .timeline-now-line span{position:absolute;right:0;top:-14px;color:#dc2626;background:#fff;font-size:10px;font-weight:800;padding:0 2px}
 }
+
+/* Individuelle Startstunde der Wochenansicht, pro Browser gespeichert */
+@media screen{
+ .week-start-control{display:flex;align-items:center;justify-content:flex-end;gap:8px;margin:0 0 7px;font-size:12px;color:#475569;font-weight:700}
+ .week-start-control select{font:inherit;background:#fff;border:1px solid #cbd5e1;border-radius:7px;padding:5px 7px;color:#0f172a}
+ .week-print-area .weekwrap{max-height:650px;overflow:auto!important;overscroll-behavior:contain}
+ .timeline-week>.weekcol>.weekhead{position:sticky!important;top:0!important;z-index:10!important;background:#f8fafc!important}
+}
