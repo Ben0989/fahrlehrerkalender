@@ -58,3 +58,8 @@
 .timeline-actions button{min-height:22px!important;padding:2px 3px!important;font-size:10px!important}
 .timeline-axis span{font-size:9px!important;right:3px!important}
 @media print{.timeline-week{min-width:0!important;grid-template-columns:32px repeat(7,minmax(0,1fr))!important}}
+
+/* Stundenraster statt Viertelstundenraster; freie Stunden antippbar */
+.timeline-week .timeline-day{background:repeating-linear-gradient(to bottom,#ffffff 0,#ffffff 59px,#cbd5e1 59px,#cbd5e1 60px)!important;cursor:crosshair}
+.timeline-week .timeline-entry{cursor:default!important;touch-action:auto!important}
+.timeline-week .timeline-entry:active{cursor:default!important}
