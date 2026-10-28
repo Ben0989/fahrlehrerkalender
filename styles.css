@@ -72,3 +72,22 @@
 .timeline-axis span{font-size:12px!important;font-weight:700!important;color:#475569!important;right:6px!important}
 .timeline-entry{font-size:11px!important;line-height:1.15!important;overflow:hidden!important}
 @media print{.timeline-week{min-width:0!important;grid-template-columns:42px repeat(7,minmax(0,1fr))!important}}
+
+/* Nur beim Wochendruck: alle Termine je Tag chronologisch untereinander. */
+.compact-week-print{display:none}
+@media print{
+ @page{size:A4 landscape;margin:7mm}
+ body:has(.compact-week-print) .week-print-area>.weekwrap,
+ body:has(.compact-week-print) .week-print-area>.printonly{display:none!important}
+ body:has(.compact-week-print) .week-print-area{padding:0!important}
+ body:has(.compact-week-print) .compact-week-print{display:block!important}
+ .compact-week-print h2{font-size:14px;margin:0 0 7px}
+ .compact-print-days{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:5px;align-items:start}
+ .compact-print-day{border:1px solid #cbd5e1;min-width:0;break-inside:avoid}
+ .compact-print-day h3{font-size:10px;text-align:center;background:#f1f5f9;margin:0;padding:5px 2px;border-bottom:1px solid #cbd5e1}
+ .compact-print-entry{padding:4px 3px;border-bottom:1px solid #e2e8f0;display:flex;flex-direction:column;gap:1px;overflow-wrap:anywhere;break-inside:avoid;font-size:9px;line-height:1.15}
+ .compact-print-entry:last-child{border-bottom:0}
+ .compact-print-entry b{font-size:9px}
+ .compact-print-entry small{font-size:8px;color:#475569}
+ .compact-print-day .print-empty{font-size:9px;color:#64748b;padding:5px 3px}
+}
