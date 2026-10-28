@@ -47,3 +47,14 @@
 .timeline-week>.weekcol:nth-child(6)>.weekhead,.timeline-week>.weekcol:nth-child(6)>.timeline-day{grid-column:6!important}
 .timeline-week>.weekcol:nth-child(7)>.weekhead,.timeline-week>.weekcol:nth-child(7)>.timeline-day{grid-column:7!important}
 .timeline-week>.weekcol:nth-child(8)>.weekhead,.timeline-week>.weekcol:nth-child(8)>.timeline-day{grid-column:8!important}
+
+/* Kompakter Wochenplan: 1px/Minute = 15px je Viertelstunde */
+.timeline-week{grid-template-columns:44px repeat(7,minmax(100px,1fr))!important;grid-template-rows:52px 1440px!important;min-width:760px!important}
+.timeline-week>.timeline-axis{height:1440px!important}
+.timeline-week>.weekcol>.weekhead{min-height:52px!important;padding:5px 2px!important;font-size:11px!important}
+.timeline-week>.weekcol>.timeline-day{height:1440px!important}
+.timeline-week .timeline-day{background:repeating-linear-gradient(to bottom,transparent 0,transparent 14px,#e2e8f0 14px,#e2e8f0 15px)!important}
+.timeline-entry{font-size:10px!important;padding:2px 3px!important;left:1px!important;right:1px!important}
+.timeline-actions button{min-height:22px!important;padding:2px 3px!important;font-size:10px!important}
+.timeline-axis span{font-size:9px!important;right:3px!important}
+@media print{.timeline-week{min-width:0!important;grid-template-columns:32px repeat(7,minmax(0,1fr))!important}}
