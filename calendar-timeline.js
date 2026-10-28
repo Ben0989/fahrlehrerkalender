@@ -64,6 +64,41 @@
    });
   });
  }
+
+ function buildWeekPrint(){
+  const area=document.querySelector('.week-print-area');
+  if(!area||page!=='calendar'||view!=='week')return;
+  area.querySelector('.compact-week-print')?.remove();
+  const start=monday(pdate(sel));
+  const printable=document.createElement('section');
+  printable.className='compact-week-print';
+  printable.innerHTML='<h2>Wochenplan '+esc(fmt(iso(start)))+' – '+esc(fmt(iso(add(start,6))))+'</h2>';
+  const grid=document.createElement('div');grid.className='compact-print-days';
+  for(let i=0;i<7;i++){
+   const ds=iso(add(start,i));
+   const day=document.createElement('div');day.className='compact-print-day';
+   day.innerHTML='<h3>'+esc(DOW[i])+' '+esc(fmt(ds,{day:'2-digit',month:'2-digit'}))+'</h3>';
+   const entries=[
+    ...apps(ds).map(x=>({kind:'drive',x})),
+    ...privs(ds).map(x=>({kind:'private',x})),
+    ...(data.officeEntries||[]).filter(x=>x.date===ds).map(x=>({kind:'office',x}))
+   ].sort((a,b)=>String(a.x.time).localeCompare(String(b.x.time)));
+   if(!entries.length)day.insertAdjacentHTML('beforeend','<p class="print-empty">Keine Termine</p>');
+   for(const {kind,x} of entries){
+    const minutes=kind==='drive'?dur(x):Number(x.minutes||60);
+    const label=kind==='drive'?sname(x.studentId):x.title;
+    const category=kind==='drive'?(TL[x.type]||'Fahrstunde'):kind==='private'?'Privat':x.type==='lesson'?'Unterricht':'Büro';
+    const item=document.createElement('div');item.className='compact-print-entry';
+    item.innerHTML='<b>'+esc(x.time)+'–'+esc(timeOf(minOf(x.time)+minutes))+'</b><span>'+esc(label)+'</span><small>'+esc(category)+'</small>';
+    day.appendChild(item);
+   }
+   grid.appendChild(day);
+  }
+  printable.appendChild(grid);area.appendChild(printable);
+ }
+ window.addEventListener('beforeprint',buildWeekPrint);
+ window.addEventListener('afterprint',()=>document.querySelectorAll('.compact-week-print').forEach(x=>x.remove()));
+
  render=function(){oldRender();setTimeout(drawTimeline,80);};
  render();
 })();
