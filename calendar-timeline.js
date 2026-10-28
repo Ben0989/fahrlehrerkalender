@@ -29,7 +29,7 @@
   const wrap=document.querySelector('.weekwrap'),week=wrap?.querySelector('.week');
   if(!week)return;
   const days=[...week.querySelectorAll('.weekcol')];if(days.length!==7)return;
-  const start=monday(pdate(sel)),px=2,top=0;
+  const start=monday(pdate(sel)),px=1,top=0;
   week.classList.add('timeline-week');
   let axis=document.createElement('div');axis.className='timeline-axis';
   for(let h=0;h<=24;h++)axis.insertAdjacentHTML('beforeend','<span style="top:'+(h*60*px)+'px">'+String(h).padStart(2,'0')+':00</span>');
@@ -45,7 +45,7 @@
    entries.forEach(({kind,x})=>{
     const duration=kind==='drive'?dur(x):Number(x.minutes||60);
     const el=document.createElement('div');el.className='timeline-entry';
-    el.style.top=(minOf(x.time)*px)+'px';el.style.height=Math.max(28,duration*px-2)+'px';
+    el.style.top=(minOf(x.time)*px)+'px';el.style.height=Math.max(24,duration*px-2)+'px';
     el.style.borderLeftColor=kind==='drive'?(C[x.type]||'#60a5fa'):kind==='private'?C.private:x.type==='lesson'?'#f59e0b':'#14b8a6';
     const label=kind==='drive'?sname(x.studentId):x.title;
     el.innerHTML='<b>'+esc(x.time)+'–'+timeOf(minOf(x.time)+duration)+'</b><div>'+esc(label)+'</div><div class="timeline-actions no-print"><button type="button" data-delta="-15">−15</button><button type="button" data-delta="15">+15</button><button type="button" data-edit="1">✎</button></div>';
