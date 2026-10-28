@@ -41,8 +41,8 @@
    body.addEventListener('click',e=>{
     if(e.target.closest('.timeline-entry'))return;
     const rect=body.getBoundingClientRect();
-    const hour=Math.max(0,Math.min(23,Math.floor((e.clientY-rect.top)/(60*px))));
-    const time=timeOf(hour*60);
+    const quarter=Math.max(0,Math.min(95,Math.floor((e.clientY-rect.top)/(15*px))));
+    const time=timeOf(quarter*15);
     const choice=window.prompt('Termin ab '+time+' Uhr anlegen:\\n1 = Fahrstunde\\n2 = Büro\\n3 = Unterricht');
     if(choice==='1'){openAppt();adate.value=ds;atime.value=time;if(typeof syncAppointmentEnd==='function')syncAppointmentEnd();preview();}
     else if(choice==='2'||choice==='3'){openOffice();odate.value=ds;otime.value=time;otype.value=choice==='2'?'office':'lesson';if(typeof syncOfficeEnd==='function')syncOfficeEnd();previewOffice();}
