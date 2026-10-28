@@ -68,10 +68,11 @@
  function buildWeekPrint(){
   const area=document.querySelector('.week-print-area');
   if(!area||page!=='calendar'||view!=='week')return;
-  area.querySelector('.compact-week-print')?.remove();
+  document.getElementById('week-print-sheet')?.remove();
   const start=monday(pdate(sel));
   const printable=document.createElement('section');
   printable.className='compact-week-print';
+  printable.id='week-print-sheet';
   printable.innerHTML='<h2>Wochenplan '+esc(fmt(iso(start)))+' – '+esc(fmt(iso(add(start,6))))+'</h2>';
   const grid=document.createElement('div');grid.className='compact-print-days';
   for(let i=0;i<7;i++){
@@ -94,10 +95,11 @@
    }
    grid.appendChild(day);
   }
-  printable.appendChild(grid);area.appendChild(printable);
+  printable.appendChild(grid);document.body.appendChild(printable);
+  document.body.classList.add('printing-week');
  }
  window.addEventListener('beforeprint',buildWeekPrint);
- window.addEventListener('afterprint',()=>document.querySelectorAll('.compact-week-print').forEach(x=>x.remove()));
+ window.addEventListener('afterprint',()=>{document.getElementById('week-print-sheet')?.remove();document.body.classList.remove('printing-week');});
 
  render=function(){oldRender();setTimeout(drawTimeline,80);};
  render();
