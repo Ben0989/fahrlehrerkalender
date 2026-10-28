@@ -29,7 +29,7 @@
   const wrap=document.querySelector('.weekwrap'),week=wrap?.querySelector('.week');
   if(!week)return;
   const days=[...week.querySelectorAll('.weekcol')];if(days.length!==7)return;
-  const start=monday(pdate(sel)),px=0.7,top=0;
+  const start=monday(pdate(sel)),px=0.6,top=0;
   week.classList.add('timeline-week');
   let axis=document.createElement('div');axis.className='timeline-axis';
   for(let h=0;h<=24;h++)axis.insertAdjacentHTML('beforeend','<span style="top:'+(h*60*px)+'px">'+String(h).padStart(2,'0')+':00</span>');
@@ -55,15 +55,28 @@
    entries.forEach(({kind,x})=>{
     const duration=kind==='drive'?dur(x):Number(x.minutes||60);
     const el=document.createElement('div');el.className='timeline-entry';
-    el.style.top=(minOf(x.time)*px)+'px';el.style.height=Math.max(18,duration*px-2)+'px';
+    el.style.top=(minOf(x.time)*px)+'px';el.style.height=Math.max(17,duration*px-2)+'px';
     el.style.borderLeftColor=kind==='drive'?(C[x.type]||'#60a5fa'):kind==='private'?C.private:x.type==='lesson'?'#f59e0b':'#14b8a6';
     const label=kind==='drive'?sname(x.studentId):x.title;
-    el.innerHTML='<b>'+esc(x.time)+'–'+timeOf(minOf(x.time)+duration)+'</b><div>'+esc(label)+'</div><div class="timeline-actions no-print"><button type="button" data-edit="1">✎</button></div>';
+    el.innerHTML='<div>'+esc(label)+'</div><div class="timeline-actions no-print"><button type="button" data-edit="1">✎</button></div>';
+    const timeLabel=document.createElement('span');timeLabel.className='timeline-event-time';timeLabel.style.top=(minOf(x.time)*px)+'px';timeLabel.textContent=x.time;body.appendChild(timeLabel);
     el.querySelector('[data-edit]').addEventListener('click',e=>{e.stopPropagation();if(kind==='drive')editAppt(x.id);else if(kind==='private')editPrivate(x.id);else editOffice(x.id);});
     body.appendChild(el);
    });
   });
+  updateNowLine();
  }
+ function updateNowLine(){
+  document.querySelectorAll('.timeline-now-line').forEach(el=>el.remove());
+  if(page!=='calendar'||view!=='week')return;
+  const now=new Date(),ds=iso(now),minutes=now.getHours()*60+now.getMinutes()+now.getSeconds()/60;
+  const body=[...document.querySelectorAll('.timeline-day')].find(el=>el.dataset.date===ds);
+  if(!body)return;
+  const line=document.createElement('div');line.className='timeline-now-line';line.style.top=(minutes*0.6)+'px';
+  line.innerHTML='<span>'+String(now.getHours()).padStart(2,'0')+':'+String(now.getMinutes()).padStart(2,'0')+'</span>';
+  body.appendChild(line);
+ }
+ setInterval(updateNowLine,15000);
 
  function buildWeekPrint(){
   const area=document.querySelector('.week-print-area');
