@@ -16,3 +16,20 @@
 }
 
 .calendar-student-link{cursor:pointer;text-decoration:underline;text-decoration-style:dotted;text-underline-offset:3px;font-weight:700}.calendar-student-link:hover{opacity:.72}.calendar-ue-cards{margin-bottom:14px}@media print{.calendar-student-link{text-decoration:none}}
+
+/* Wochen-Zeitachse: 15-Minuten-Raster, 2px pro Minute */
+.timeline-week{display:grid!important;grid-template-columns:55px repeat(7,minmax(125px,1fr))!important;min-width:980px!important;align-items:start}
+.timeline-axis{position:relative;height:2880px;margin-top:70px;border-right:1px solid #cbd5e1}
+.timeline-axis span{position:absolute;right:5px;transform:translateY(-50%);font-size:10px;color:#64748b}
+.timeline-week .weekcol{min-width:0}
+.timeline-week .weekhead{min-height:70px}
+.timeline-week .timeline-day{position:relative;padding:0!important;background:repeating-linear-gradient(to bottom,transparent 0,transparent 29px,#e2e8f0 29px,#e2e8f0 30px)!important}
+.timeline-entry{position:absolute;left:2px;right:2px;z-index:2;box-sizing:border-box;background:#f8fafc;border:1px solid #cbd5e1;border-left:5px solid #60a5fa;border-radius:5px;padding:3px 5px;font-size:11px;overflow:auto;touch-action:pan-x;cursor:grab;user-select:none}
+.timeline-entry:active{cursor:grabbing}
+.timeline-entry div{overflow-wrap:anywhere}
+.timeline-actions{display:flex;gap:3px;margin-top:4px}
+.timeline-actions button{border:1px solid #cbd5e1;background:#fff;border-radius:4px;padding:3px 5px;min-height:26px;cursor:pointer}
+.solar-line{position:absolute;left:0;right:0;z-index:3;border-top:2px dashed #eab308;font-size:10px;font-weight:700;color:#854d0e;pointer-events:none;text-align:right}
+.solar-line.set{border-color:#f97316;color:#c2410c}
+#private .mf .primary{min-height:44px;cursor:pointer;touch-action:manipulation}
+@media print{.timeline-week{min-width:0!important;grid-template-columns:36px repeat(7,minmax(0,1fr))!important}.timeline-entry{font-size:7px;overflow:hidden}.timeline-actions{display:none!important}.timeline-axis span{font-size:8px}}
