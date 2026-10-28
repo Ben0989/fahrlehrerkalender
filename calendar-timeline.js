@@ -37,6 +37,16 @@
   days.forEach((col,i)=>{
    const ds=iso(add(start,i)),body=col.querySelector('.weekbody');if(!body)return;
    body.innerHTML='';body.classList.add('timeline-day');body.style.height=(1440*px)+'px';
+   body.dataset.date=ds;
+   body.addEventListener('click',e=>{
+    if(e.target.closest('.timeline-entry'))return;
+    const rect=body.getBoundingClientRect();
+    const hour=Math.max(0,Math.min(23,Math.floor((e.clientY-rect.top)/(60*px))));
+    const time=timeOf(hour*60);
+    const choice=window.prompt('Termin ab '+time+' Uhr anlegen:\\n1 = Fahrstunde\\n2 = Büro\\n3 = Unterricht');
+    if(choice==='1'){openAppt();adate.value=ds;atime.value=time;if(typeof syncAppointmentEnd==='function')syncAppointmentEnd();preview();}
+    else if(choice==='2'||choice==='3'){openOffice();odate.value=ds;otime.value=time;otype.value=choice==='2'?'office':'lesson';if(typeof syncOfficeEnd==='function')syncOfficeEnd();previewOffice();}
+   });
    const sr=typeof sunrise==='function'?sunrise(ds):null,ss=sunset(ds);
    for(const [label,t,cls] of [['Aufgang',sr,'rise'],['Untergang',ss,'set']]){
     if(!t)continue;const line=document.createElement('div');line.className='solar-line '+cls;line.style.top=(minOf(t)*px)+'px';line.textContent=label+' '+t;body.appendChild(line);
@@ -48,13 +58,8 @@
     el.style.top=(minOf(x.time)*px)+'px';el.style.height=Math.max(24,duration*px-2)+'px';
     el.style.borderLeftColor=kind==='drive'?(C[x.type]||'#60a5fa'):kind==='private'?C.private:x.type==='lesson'?'#f59e0b':'#14b8a6';
     const label=kind==='drive'?sname(x.studentId):x.title;
-    el.innerHTML='<b>'+esc(x.time)+'–'+timeOf(minOf(x.time)+duration)+'</b><div>'+esc(label)+'</div><div class="timeline-actions no-print"><button type="button" data-delta="-15">−15</button><button type="button" data-delta="15">+15</button><button type="button" data-edit="1">✎</button></div>';
-    el.querySelectorAll('[data-delta]').forEach(b=>b.addEventListener('click',e=>{e.stopPropagation();move(kind,x.id,Number(b.dataset.delta));}));
+    el.innerHTML='<b>'+esc(x.time)+'–'+timeOf(minOf(x.time)+duration)+'</b><div>'+esc(label)+'</div><div class="timeline-actions no-print"><button type="button" data-edit="1">✎</button></div>';
     el.querySelector('[data-edit]').addEventListener('click',e=>{e.stopPropagation();if(kind==='drive')editAppt(x.id);else if(kind==='private')editPrivate(x.id);else editOffice(x.id);});
-    let origin=null;
-    el.addEventListener('pointerdown',e=>{if(e.target.closest('button'))return;origin={y:e.clientY,id:e.pointerId};el.setPointerCapture(e.pointerId);});
-    el.addEventListener('pointerup',e=>{if(!origin)return;const delta=Math.round((e.clientY-origin.y)/(px*15))*15;origin=null;if(delta)move(kind,x.id,delta);});
-    el.addEventListener('pointercancel',()=>origin=null);
     body.appendChild(el);
    });
   });
