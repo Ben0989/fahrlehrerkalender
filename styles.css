@@ -63,3 +63,12 @@
 .timeline-week .timeline-day{background:repeating-linear-gradient(to bottom,#ffffff 0,#ffffff 59px,#cbd5e1 59px,#cbd5e1 60px)!important;cursor:crosshair}
 .timeline-week .timeline-entry{cursor:default!important;touch-action:auto!important}
 .timeline-week .timeline-entry:active{cursor:default!important}
+
+/* Dichte Wochenansicht nach Referenz: 42px pro Stunde, volle Stunden markiert */
+.timeline-week{grid-template-columns:54px repeat(7,minmax(90px,1fr))!important;grid-template-rows:52px 1008px!important;min-width:700px!important}
+.timeline-week>.timeline-axis{height:1008px!important}
+.timeline-week>.weekcol>.timeline-day{height:1008px!important}
+.timeline-week .timeline-day{background:repeating-linear-gradient(to bottom,#fff 0,#fff 41px,#cbd5e1 41px,#cbd5e1 42px)!important}
+.timeline-axis span{font-size:12px!important;font-weight:700!important;color:#475569!important;right:6px!important}
+.timeline-entry{font-size:11px!important;line-height:1.15!important;overflow:hidden!important}
+@media print{.timeline-week{min-width:0!important;grid-template-columns:42px repeat(7,minmax(0,1fr))!important}}
