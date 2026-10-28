@@ -33,3 +33,17 @@
 .solar-line.set{border-color:#f97316;color:#c2410c}
 #private .mf .primary{min-height:44px;cursor:pointer;touch-action:manipulation}
 @media print{.timeline-week{min-width:0!important;grid-template-columns:36px repeat(7,minmax(0,1fr))!important}.timeline-entry{font-size:7px;overflow:hidden}.timeline-actions{display:none!important}.timeline-axis span{font-size:8px}}
+
+/* Wochenansicht: Zeitachse vertikal links, Tage als Spalten rechts */
+.timeline-week{display:grid!important;grid-template-columns:55px repeat(7,minmax(125px,1fr))!important;grid-template-rows:70px 2880px!important;align-items:start!important;position:relative}
+.timeline-week>.timeline-axis{grid-column:1!important;grid-row:2!important;margin-top:0!important;height:2880px!important;position:relative!important}
+.timeline-week>.weekcol{display:contents!important}
+.timeline-week>.weekcol>.weekhead{grid-row:1!important;min-height:70px!important}
+.timeline-week>.weekcol>.timeline-day{grid-row:2!important;height:2880px!important}
+.timeline-week>.weekcol:nth-child(2)>.weekhead,.timeline-week>.weekcol:nth-child(2)>.timeline-day{grid-column:2!important}
+.timeline-week>.weekcol:nth-child(3)>.weekhead,.timeline-week>.weekcol:nth-child(3)>.timeline-day{grid-column:3!important}
+.timeline-week>.weekcol:nth-child(4)>.weekhead,.timeline-week>.weekcol:nth-child(4)>.timeline-day{grid-column:4!important}
+.timeline-week>.weekcol:nth-child(5)>.weekhead,.timeline-week>.weekcol:nth-child(5)>.timeline-day{grid-column:5!important}
+.timeline-week>.weekcol:nth-child(6)>.weekhead,.timeline-week>.weekcol:nth-child(6)>.timeline-day{grid-column:6!important}
+.timeline-week>.weekcol:nth-child(7)>.weekhead,.timeline-week>.weekcol:nth-child(7)>.timeline-day{grid-column:7!important}
+.timeline-week>.weekcol:nth-child(8)>.weekhead,.timeline-week>.weekcol:nth-child(8)>.timeline-day{grid-column:8!important}
