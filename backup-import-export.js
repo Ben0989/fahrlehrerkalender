@@ -52,7 +52,7 @@
         const containsGPS=Object.prototype.hasOwnProperty.call(incoming,'gpsRoutes');
         if(containsGPS&&!validGPSRoutes(incoming.gpsRoutes))return toast('Ungültige GPS-Streckendaten im Backup.');
         const importedGPS=containsGPS?incoming.gpsRoutes:null;
-        const msg='Backup importieren?\n\n'+students.length+' Fahrschüler\n'+appointments.length+' Fahrtermine\n'+officeEntries.length+' Unterricht/Büro-Termine\n'+vacations.length+' Urlaubseinträge\n\nDie aktuell gespeicherten Daten auf diesem Gerät werden ersetzt.';
+        const msg='Backup importieren?\n\n'+students.length+' Fahrschüler\n'+appointments.length+' Fahrtermine\n'+officeEntries.length+' Unterricht/Büro-Termine\n'+vacations.length+' Urlaubseinträge\n'+(containsGPS?gpsRouteCount(importedGPS)+' GPS-Fahrstrecken':'GPS-Fahrstrecken: im älteren Backup nicht enthalten (bleiben erhalten)')+'\n\nDie aktuell gespeicherten Kalenderdaten auf diesem Gerät werden ersetzt.';
         if(!confirm(msg)) return;
         const clean={...incoming,students,appointments,vacations,privateEntries,officeEntries,trainingRatings,settings:{...(data.settings||{}),...settings}};
         delete clean._backup;
