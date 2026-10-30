@@ -6,3 +6,53 @@
 .route-general-notes textarea{width:100%;min-height:160px;resize:vertical;border:1px solid #d1d5db;border-radius:8px;padding:10px;font:inherit}
 @media(max-width:600px){.route-main{grid-template-columns:1fr 145px;gap:8px}}
 @media print{.route-comment{min-height:34px}.route-general-notes{break-inside:avoid}.route-general-notes textarea{min-height:100px}}
+
+/* Einheitliches Prüfgebiet-Layout: Streckenname, Bewertung und Kommentar
+   immer untereinander in einer durchgehenden, gleich breiten Spalte. */
+.route-group,.route-row,.route-main{min-width:0;box-sizing:border-box}
+.route-group .route-row{
+ display:block!important;
+ width:100%;
+ padding:12px 14px;
+ border-bottom:1px solid #eef0f3;
+}
+.route-group .route-main{
+ display:flex!important;
+ flex-direction:column!important;
+ align-items:stretch!important;
+ gap:7px!important;
+ width:100%;
+ min-width:0;
+}
+.route-group .route-main>div{
+ display:block;
+ width:100%;
+ min-width:0;
+ overflow-wrap:anywhere;
+ font-weight:600;
+ line-height:1.35;
+}
+.route-group .route-main>select{
+ display:block;
+ width:100%!important;
+ max-width:100%;
+ min-width:0;
+ box-sizing:border-box;
+ min-height:40px;
+ margin:0;
+}
+.route-group .route-row>.route-comment{
+ display:block;
+ width:100%!important;
+ max-width:100%;
+ min-width:0;
+ box-sizing:border-box;
+ margin:8px 0 0;
+ min-height:48px;
+}
+.route-general-notes textarea{box-sizing:border-box;max-width:100%}
+@media(max-width:600px){
+ .route-group .route-row{padding:10px 12px}
+ .route-group .route-main{gap:6px!important}
+ .route-group .route-main>select{min-height:42px}
+}
