@@ -182,3 +182,22 @@
    .weekwrap,.week-print-area .weekwrap{height:65dvh;max-height:650px}
  }
 }
+
+/* Uhrzeitspalte bleibt beim horizontalen Wischen sichtbar.
+   Vertikal scrollt sie gemeinsam mit den Terminen. */
+@media screen{
+ .weekwrap>.timeline-week>.timeline-axis{
+   position:sticky!important;
+   left:0!important;
+   z-index:20!important;
+   grid-column:1!important;
+   grid-row:2!important;
+   background:#fff!important;
+   box-shadow:2px 0 3px rgba(15,23,42,.10);
+   border-right:1px solid #cbd5e1;
+ }
+ .weekwrap>.timeline-week>.timeline-axis span{
+   display:block;
+   white-space:nowrap;
+ }
+}
