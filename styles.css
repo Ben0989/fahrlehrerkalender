@@ -142,3 +142,43 @@
 #gps-route-map{width:100%;height:380px;min-height:300px;margin:12px 0;border:1px solid #cbd5e1;border-radius:8px;z-index:0}
 #gps-route-map[hidden]{display:none}
 @media print{.gps-controls,.gps-route-item button{display:none!important}}
+
+/* Wochenkalender als zweidimensionales Wischfeld auf Mobilgeräten.
+   Nur das Raster scrollt; Navigation und Druck-Schaltflächen bleiben stehen. */
+@media screen{
+ .layout,.layout>main,main .panel,main .panelbody{min-width:0}
+ .week-print-area,.week-print-area .panelbody{min-width:0;max-width:100%}
+ .weekwrap,.week-print-area .weekwrap{
+   display:block;
+   box-sizing:border-box;
+   width:100%;
+   max-width:100%;
+   min-width:0;
+   height:min(68dvh,650px);
+   min-height:300px;
+   overflow-x:auto!important;
+   overflow-y:auto!important;
+   overscroll-behavior-x:contain;
+   overscroll-behavior-y:contain;
+   -webkit-overflow-scrolling:touch;
+   touch-action:pan-x pan-y;
+   scrollbar-width:thin;
+   scrollbar-color:#94a3b8 transparent;
+ }
+ .weekwrap>.timeline-week{
+   width:max-content!important;
+   min-width:824px!important;
+   max-width:none!important;
+   touch-action:pan-x pan-y;
+ }
+ .weekwrap .timeline-day,.weekwrap .timeline-axis{
+   touch-action:pan-x pan-y;
+ }
+ .weekwrap .timeline-entry,.weekwrap .timeline-actions button{
+   touch-action:pan-x pan-y!important;
+ }
+ .week-swipe-hint{font-size:12px;color:#64748b;text-align:center;padding:5px 2px 7px;user-select:none}
+ @media(max-width:650px){
+   .weekwrap,.week-print-area .weekwrap{height:65dvh;max-height:650px}
+ }
+}
