@@ -6,6 +6,7 @@
   'use strict';
   const config = window.FAHRLEHRER_SUPABASE || {};
   const MAIN_KEY = 'fahrlehrerkalender_v2';
+  const LEGACY_KEY = 'fahrlehrerkalender_v1';
   const GPS_KEY = 'fahrlehrerkalender_gps_routes_v1';
   const CLOUD_TABLE = 'fahrlehrer_calendar_state';
   const app = document.getElementById('cloud-auth');
@@ -25,7 +26,7 @@
     catch { throw new Error('Lokale Daten beschädigt: ' + key + '. Bitte zuerst ein Backup sichern.'); }
   }
   function snapshot() {
-    return { calendar_data: parseJSON(MAIN_KEY, {}), gps_routes: parseJSON(GPS_KEY, {}) };
+    return { calendar_data: localStorage.getItem(MAIN_KEY) ? parseJSON(MAIN_KEY, {}) : (localStorage.getItem(LEGACY_KEY) ? parseJSON(LEGACY_KEY, {}) : JSON.parse(JSON.stringify(data))), gps_routes: parseJSON(GPS_KEY, {}) };
   }
   function validSnapshot(s) {
     return s && s.calendar_data && typeof s.calendar_data === 'object' &&
