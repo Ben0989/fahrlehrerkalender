@@ -129,3 +129,16 @@
  .week-print-area .weekwrap{max-height:650px;overflow:auto!important;overscroll-behavior:contain}
  .timeline-week>.weekcol>.weekhead{position:sticky!important;top:0!important;z-index:10!important;background:#f8fafc!important}
 }
+
+/* GPS-Aufzeichnung im Prüfgebiet */
+.gps-controls{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin:10px 0;padding:10px;background:#f8fafc;border:1px solid #e2e8f0;border-radius:10px}
+.gps-controls button{min-height:42px}
+.gps-controls button:disabled{opacity:.45;cursor:not-allowed}
+#gps-record-status{font-size:12px;color:#475569;flex:1 1 220px}
+.gps-routes-section{margin:20px 0;padding:15px}
+.gps-routes-section h3{margin:0 0 12px}
+.gps-route-item{display:flex;align-items:center;gap:8px;flex-wrap:wrap;border-bottom:1px solid #e2e8f0;padding:8px 0;font-size:13px}
+.gps-route-item span{flex:1 1 190px}
+#gps-route-map{width:100%;height:380px;min-height:300px;margin:12px 0;border:1px solid #cbd5e1;border-radius:8px;z-index:0}
+#gps-route-map[hidden]{display:none}
+@media print{.gps-controls,.gps-route-item button{display:none!important}}
