@@ -13,7 +13,7 @@ Diese Entwicklung liegt ausschließlich im Branch `chatgpt-site-supabase`. Der G
 ## Noch erforderlich
 1. Altes Supabase-Projekt `kummerkasten` erst nach abgeschlossener Website- und Auth-Migration pausieren.
 2. Das gewünschte Projekt `pruefungsrouten` (`jkeecmedgsqymiskwtcl`) wiederherstellen.
-3. SQL-Migration in genau diesem Projekt anwenden.
+3. SQL-Migration ist im Projekt \`kummerkasten\` bereits angewendet.
 4. In `index.html` die öffentliche Supabase-URL und den **Publishable Key** in `window.FAHRLEHRER_SUPABASE` eintragen. Niemals einen Service-Role-Key veröffentlichen.
 5. Auth-Konfiguration, E-Mail-Bestätigung, Site-URL/Redirects und ggf. Benutzerregistrierung einstellen.
 6. Die zweite Version in der gewünschten Site-Umgebung bereitstellen; Veröffentlichung einer ChatGPT Site kann nicht über GitHub allein erfolgen.
