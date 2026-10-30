@@ -7,52 +7,53 @@
 @media(max-width:600px){.route-main{grid-template-columns:1fr 145px;gap:8px}}
 @media print{.route-comment{min-height:34px}.route-general-notes{break-inside:avoid}.route-general-notes textarea{min-height:100px}}
 
-/* Einheitliches Prüfgebiet-Layout: Streckenname, Bewertung und Kommentar
-   immer untereinander in einer durchgehenden, gleich breiten Spalte. */
-.route-group,.route-row,.route-main{min-width:0;box-sizing:border-box}
+/* Prüfgebiet: drei gleich breite, sauber ausgerichtete Spalten pro Strecke:
+   Streckenname | Bewertung | Kommentar. */
+.route-group,.route-group .route-row{min-width:0;box-sizing:border-box}
 .route-group .route-row{
- display:block!important;
+ display:grid!important;
+ grid-template-columns:repeat(3,minmax(0,1fr))!important;
+ align-items:center!important;
+ column-gap:10px!important;
  width:100%;
- padding:12px 14px;
+ padding:10px 12px;
  border-bottom:1px solid #eef0f3;
 }
 .route-group .route-main{
- display:flex!important;
- flex-direction:column!important;
- align-items:stretch!important;
- gap:7px!important;
- width:100%;
- min-width:0;
+ display:contents!important;
 }
 .route-group .route-main>div{
- display:block;
- width:100%;
  min-width:0;
+ width:100%;
  overflow-wrap:anywhere;
  font-weight:600;
- line-height:1.35;
+ line-height:1.3;
 }
 .route-group .route-main>select{
- display:block;
  width:100%!important;
- max-width:100%;
- min-width:0;
+ min-width:0!important;
+ max-width:100%!important;
  box-sizing:border-box;
+ margin:0!important;
  min-height:40px;
- margin:0;
+ font-size:13px;
 }
 .route-group .route-row>.route-comment{
- display:block;
  width:100%!important;
- max-width:100%;
- min-width:0;
+ min-width:0!important;
+ max-width:100%!important;
  box-sizing:border-box;
- margin:8px 0 0;
- min-height:48px;
+ margin:0!important;
+ min-height:40px;
+ height:46px;
+ padding:7px;
+ resize:vertical;
+ font-size:13px;
 }
 .route-general-notes textarea{box-sizing:border-box;max-width:100%}
 @media(max-width:600px){
- .route-group .route-row{padding:10px 12px}
- .route-group .route-main{gap:6px!important}
- .route-group .route-main>select{min-height:42px}
+ .route-group .route-row{column-gap:5px!important;padding:8px 6px}
+ .route-group .route-main>div{font-size:11px}
+ .route-group .route-main>select{font-size:11px;padding:5px 2px;min-height:42px}
+ .route-group .route-row>.route-comment{font-size:11px;padding:5px;height:44px}
 }
