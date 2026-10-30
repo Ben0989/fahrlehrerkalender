@@ -42,6 +42,12 @@
    control.querySelector('select').addEventListener('change',e=>window.setWeekStartHour(e.target.value));
   }
   control.querySelector('select').value=String(getStartHour());
+  if(!wrap.parentElement.querySelector('.week-swipe-hint')){
+   const hint=document.createElement('div');
+   hint.className='week-swipe-hint no-print';
+   hint.textContent='↔ Tage seitlich wischen · ↕ Uhrzeiten nach oben/unten scrollen';
+   wrap.insertAdjacentElement('beforebegin',hint);
+  }
   let axis=document.createElement('div');axis.className='timeline-axis';
   for(let h=0;h<=24;h++)axis.insertAdjacentHTML('beforeend','<span style="top:'+(h*60*px)+'px">'+String(h).padStart(2,'0')+':00</span>');
   week.prepend(axis);
