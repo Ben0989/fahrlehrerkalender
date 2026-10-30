@@ -64,7 +64,7 @@ window.stopTrainingGPS=async function(){
  const all=routes();(all[trip.studentId]||(all[trip.studentId]=[])).push(entry);
  if(!persist(all))return;
  status(matched?'Route gespeichert und an Straßen angepasst.':'GPS-Route gespeichert. Straßenanpassung derzeit nicht verfügbar.');
- if(page==='practice')render();
+ if(page==='practice'){render();if(currentStudent()===trip.studentId)window.showTrainingGPS(entry.id)}
 };
 window.deleteTrainingGPS=function(id){const sid=currentStudent();if(!sid||!confirm('Diese GPS-Aufzeichnung endgültig löschen?'))return;const all=routes();all[sid]=(all[sid]||[]).filter(r=>r.id!==id);persist(all);render()};
 function loadLeaflet(){
