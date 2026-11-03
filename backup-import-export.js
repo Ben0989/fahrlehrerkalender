@@ -64,6 +64,7 @@
           catch(e){alert('Import abgebrochen: GPS-Strecken konnten nicht gespeichert werden (Speicherplatz prüfen).');return}
         }
         data=clean;
+        window.initializeStudentDiagramStages?.();
         save();
         sel=today();page='calendar';view='day';
         document.querySelectorAll('.nav,.mnav').forEach(x=>x.classList.toggle('active',x.dataset.page==='calendar'));

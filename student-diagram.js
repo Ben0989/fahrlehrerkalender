@@ -259,14 +259,46 @@ const blocks = [
 ];
 const dialog = document.getElementById('studentDiagram');
 const sheet = dialog.querySelector('.diagram-sheet');
+const stages = ['Grundstufe', 'Aufbaustufe', 'Leistungsstufe', 'Reife- und Teststufe'];
+const stageGroups = [...stages.slice(0, 3), 'Reife-, Teststufe'];
+function diagramVariant(student){
+  return (student.cls || '').trim().toUpperCase() === 'BE' ? 'BE' : 'B';
+}
+function stageIndex(stage){
+  return Math.max(0, stages.indexOf(['Reifestufe', 'Teststufe', 'Reife-, Teststufe'].includes(stage) ? stages[3] : stage));
+}
+function applyStage(student, seedStage){
+  const variant = diagramVariant(student);
+  const catalog = variant === 'BE' ? trailer : DIAGRAMM;
+  const progress = student.diagramProgress?.[variant];
+  const checked = new Set(Array.isArray(progress) ? progress : []);
+  const keys = stageGroups.map(group => catalog[group].map(item => group + ' / ' + item));
+  const highest = keys.reduce((level, group, index) => group.some(key => checked.has(key)) ? index : level, 0);
+  if (seedStage !== undefined) {
+    const initial = stageIndex(seedStage);
+    student.diagramEntryStages = {...student.diagramEntryStages, [variant]: stages[initial]};
+    keys.slice(0, initial).flat().forEach(key => checked.add(key));
+    student.diagramProgress = {...student.diagramProgress, [variant]: [...checked]};
+  }
+  student.stage = stages[Math.max(highest, stageIndex(student.diagramEntryStages?.[variant]))];
+}
+window.syncStudentDiagramStage = applyStage;
+window.initializeStudentDiagramStages = () => {
+  let changed = false;
+  for (const student of data.students) {
+    if (student.diagramEntryStages?.[diagramVariant(student)]) continue;
+    applyStage(student, student.stage || stages[0]);
+    changed = true;
+  }
+  if (changed) save();
+};
 function openDiagram(studentId){
   const student = data.students.find(entry => String(entry.id) === String(studentId));
   if (!student) return;
-  const be = (student.cls || '').trim().toUpperCase() === 'BE';
-  const variant = be ? 'BE' : 'B';
-  const catalog = be ? trailer : DIAGRAMM;
+  const variant = diagramVariant(student);
+  const catalog = variant === 'BE' ? trailer : DIAGRAMM;
   const checked = new Set(Array.isArray(student.diagramProgress?.[variant]) ? student.diagramProgress[variant] : []);
-  dialog.querySelector('.diagram-student').textContent = [student.first, student.last, student.cls].filter(Boolean).join(' · ');
+
   sheet.innerHTML = blocks.filter(([group]) => catalog[group]).map(([group, subtitle, style, title]) => {
     const rows = catalog[group].map(item => {
       const key = group + ' / ' + item;
@@ -275,6 +307,8 @@ function openDiagram(studentId){
     return '<section class="diagram-block diagram-'+style+'"><header><h3>'+esc(title || group)+'</h3><small>'+esc(subtitle)+'</small><output></output></header>'+rows+'</section>';
   }).join('');
   function refreshCounts(){
+    const current = data.students.find(entry => String(entry.id) === String(studentId));
+    dialog.querySelector('.diagram-student').textContent = [current.first, current.last, current.cls, current.stage].filter(Boolean).join(' · ');
     for (const section of sheet.querySelectorAll('section')) {
       section.querySelector('output').textContent = section.querySelectorAll('input:checked').length + ' / ' + section.querySelectorAll('input').length;
     }
@@ -286,12 +320,15 @@ function openDiagram(studentId){
       ...current.diagramProgress,
       [variant]: Array.from(sheet.querySelectorAll('input:checked'), input => input.value)
     };
+    applyStage(current);
     save();
     refreshCounts();
+    render();
   };
   refreshCounts();
   if (!dialog.open) dialog.showModal();
   dialog.scrollTop = 0;
 }
 window.openStudentDiagram = openDiagram;
+window.initializeStudentDiagramStages();
 })();
