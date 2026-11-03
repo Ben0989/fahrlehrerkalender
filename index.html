@@ -10,6 +10,7 @@
 <link rel="stylesheet" href="student-management.css">
 <link rel="stylesheet" href="pruefgebiet.css">
 <link rel="stylesheet" href="office-integration.css">
+<link rel="stylesheet" href="student-diagram.css">
 </head>
 <body>
 <header class="top">
@@ -111,6 +112,13 @@
 </div></div>
 <input type="file" id="backupImportFile" accept=".json,application/json" hidden onchange="importDataFile(this.files[0]);this.value=''">
 <div class="toast" id="toast"></div>
+<dialog id="studentDiagram" aria-labelledby="studentDiagramTitle">
+  <div class="diagram-heading">
+    <div><h2 id="studentDiagramTitle">Ausbildungsdiagrammkarte</h2><p class="diagram-student"></p></div>
+    <form method="dialog"><button class="btn light" type="submit">Schließen</button></form>
+  </div>
+  <div class="diagram-sheet"></div>
+</dialog>
 <script src="app.js"></script>
 <script src="enhancements.js"></script>
 <script src="stage-enhancements.js"></script>
@@ -121,6 +129,7 @@
 <script src="pruefgebiet-integration.js"></script>
 <script src="date-filter-fix.js"></script>
 <script src="office-integration.js"></script>
+<script src="student-diagram.js"></script>
 <script src="student-appointment-history.js"></script>
 <script src="backup-import-export.js"></script>
 <script src="calendar-student-overview.js"></script>
